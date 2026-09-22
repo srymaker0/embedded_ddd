@@ -1,0 +1,4 @@
+interface:
+  display_name: "Embedded Linux Debug"
+  short_description: "Inspect embedded Linux processes with GDB"
+  default_prompt: "Use $embedded-linux-debug with this project and the configured target."

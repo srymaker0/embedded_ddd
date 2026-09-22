@@ -1,0 +1,37 @@
+name: Host checks
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.8', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: sudo apt-get update && sudo apt-get install -y gcc gdb openssh-server openssh-client telnet curl
+      - run: sudo mkdir -p /run/sshd
+      - run: python -m pip install -e '.[console,serial]'
+      - name: Build helper distributions
+        run: |
+          python -m pip install build
+          python -m build
+      - name: Test the source distribution
+        run: |
+          mkdir "$RUNNER_TEMP/embedded-ddd-source"
+          tar -xzf dist/*.tar.gz --strip-components=1 -C "$RUNNER_TEMP/embedded-ddd-source"
+          cd "$RUNNER_TEMP/embedded-ddd-source"
+          python -m unittest discover -s tests -v
+      - name: Install and run the wheel outside the checkout
+        run: |
+          python -m venv "$RUNNER_TEMP/embedded-ddd-wheel"
+          "$RUNNER_TEMP/embedded-ddd-wheel/bin/python" -m pip install dist/*.whl
+          "$RUNNER_TEMP/embedded-ddd-wheel/bin/python" -m pip check
+          cd "$RUNNER_TEMP"
+          "$RUNNER_TEMP/embedded-ddd-wheel/bin/embedded-ddd" --help

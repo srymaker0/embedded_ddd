@@ -1,0 +1,4 @@
+interface:
+  display_name: "Embedded Linux Deploy"
+  short_description: "Deploy with project tools and device evidence"
+  default_prompt: "Use $embedded-linux-deploy with this project and the configured target."

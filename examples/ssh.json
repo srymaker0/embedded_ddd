@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "name": "lab-board",
+  "connection": {"type": "ssh", "host": "lab-board"},
+  "transfer": {"method": "sftp"},
+  "logs": [
+    {"name": "application", "kind": "remote", "path": "/var/log/sample-app.log"}
+  ],
+  "probes": [
+    {"name": "process", "command": "pidof sample-app"}
+  ],
+  "gdb": {"native": "/tmp/debug-tools/gdb"},
+  "deploy": {
+    "cwd": "/path/to/application",
+    "argv": ["./scripts/deploy.sh", "lab-board"],
+    "success_means": "Replace with what this project's installer actually verifies",
+    "verify_command": "pidof sample-app"
+  }
+}

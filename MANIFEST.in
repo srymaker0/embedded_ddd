@@ -1,0 +1,7 @@
+include INSTALL.md README.zh-CN.md
+include bin/embedded-ddd scripts/link_skills.py
+recursive-include assets *.svg
+recursive-include skills *.md *.yaml
+recursive-include examples *.json
+recursive-include evals *.json
+recursive-include tests *.py *.c

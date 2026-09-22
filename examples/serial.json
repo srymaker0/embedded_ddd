@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "name": "serial-only-board",
+  "connection": {
+    "type": "serial",
+    "device": "/dev/serial/by-id/REPLACE_WITH_YOUR_DEVICE",
+    "baud": 115200,
+    "user": "root"
+  },
+  "logs": [
+    {"name": "application", "kind": "remote", "path": "/var/log/sample-app.log"}
+  ],
+  "gdb": {"native": "/usr/bin/gdb", "auto_solib_add": false}
+}

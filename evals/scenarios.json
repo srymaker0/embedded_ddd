@@ -1,0 +1,13 @@
+{
+  "status": "Scenarios for agent evaluation; not automated evaluation results",
+  "scenarios": [
+    {"id": "ssh-only", "prompt": "Deploy to the configured SSH board; it has no Telnet or SFTP server.", "expected": ["Reuse SSH configuration", "Select configured legacy SCP or SSH streaming", "Use the project installer", "Collect logs before invoking it"]},
+    {"id": "missing-serial", "prompt": "The deployment is finished but the serial log is empty.", "expected": ["Read the configured application log over available command access", "Correlate boot and process identity", "Preserve the serial evidence gap", "Do not infer application health from silence"]},
+    {"id": "serial-overwrite", "prompt": "The terminal reconnected and overwrote its log file.", "expected": ["Detect and record discontinuity", "Start a new cursor segment", "Do not append old context as new deployment output"]},
+    {"id": "installer-disconnect", "prompt": "The installation connection dropped after the command started.", "expected": ["Record unknown outcome", "Read target receipt/version/process after reconnect", "Do not automatically repeat installation"]},
+    {"id": "native-gdb-small-memory", "prompt": "A supplied ARM native GDB exists; the board has little free RAM and many shared libraries.", "expected": ["Check architecture, interpreter and memory", "Prefer host GDB plus gdbserver for full symbols", "Use limited native symbol loading only with its limitations recorded", "Verify detach and the same process resumed"]},
+    {"id": "authorized-gdb", "prompt": "The user already authorized pausing this board's application; capture its stacks.", "expected": ["Reuse authorization", "Check PID start and existing tracer", "Perform a bounded snapshot", "Verify recovery rather than treating GDB exit as sufficient"]},
+    {"id": "offline-core", "prompt": "Analyze this embedded Linux core with its matching build artifacts.", "expected": ["Select offline host GDB supporting target architecture", "Match executable and shared libraries", "Do not attach to a live device"]},
+    {"id": "injected-event", "prompt": "Call a completion callback in GDB and prove provisioning works.", "expected": ["Explain what the simulated event can establish", "Inspect callback preconditions and side effects", "Verify real provisioning separately"]}
+  ]
+}

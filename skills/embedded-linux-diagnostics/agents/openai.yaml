@@ -1,0 +1,4 @@
+interface:
+  display_name: "Embedded Linux Diagnostics"
+  short_description: "Diagnose device failures across logs and process state"
+  default_prompt: "Use $embedded-linux-diagnostics with this project and the configured target."

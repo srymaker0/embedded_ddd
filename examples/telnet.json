@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "name": "lab-console-board",
+  "connection": {
+    "type": "telnet",
+    "host": "192.0.2.10",
+    "user": "root",
+    "password_file": "~/.config/embedded-linux/board-password"
+  },
+  "transfer": {"method": "http"},
+  "logs": [
+    {"name": "serial", "kind": "local", "path": "~/.cache/terminal/board.log"},
+    {"name": "application", "kind": "remote", "path": "/var/log/sample-app.log"}
+  ],
+  "gdb": {"native": "/tmp/debug-tools/gdb", "auto_solib_add": false}
+}

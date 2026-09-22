@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "embedded-ddd"
+version = "0.1.0"
+description = "Deploy, Diagnostics, Debug: agent skills and tools for embedded Linux"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+readme = "README.md"
+
+[project.urls]
+Repository = "https://github.com/srymaker0/embedded_ddd"
+Issues = "https://github.com/srymaker0/embedded_ddd/issues"
+
+[project.optional-dependencies]
+console = ["pexpect>=4.8,<5"]
+serial = ["pexpect>=4.8,<5", "pyserial>=3.5,<4"]
+
+[project.scripts]
+embedded-ddd = "embedded_linux.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["embedded_linux*"]
