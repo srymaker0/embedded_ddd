@@ -2,6 +2,7 @@ import os
 import pty
 import subprocess
 import tempfile
+import tty
 import unittest
 from pathlib import Path
 from unittest.mock import patch
@@ -53,26 +54,34 @@ class ConsoleTests(unittest.TestCase):
 
 class SerialTests(unittest.TestCase):
     def test_real_pseudoterminal_shell_and_close(self):
-        master, slave = pty.openpty()
-        process = subprocess.Popen(["/bin/sh", "-i"], stdin=master, stdout=master, stderr=master,
-                                   start_new_session=True)
-        session = None
-        try:
-            session = Console({"type": "serial", "device": os.ttyname(slave), "timeout": 3})
-            self.assertEqual(session.execute("printf serial-ok"), (0, "serial-ok"))
-            session.close()
-            self.assertFalse(session.serial.is_open)
-        finally:
-            if session:
-                session.close()
-            process.terminate()
-            try:
-                process.wait(timeout=0.5)
-            except subprocess.TimeoutExpired:
-                process.kill()  # Interactive shells may ignore TERM; this PID is our fixture.
-                process.wait(timeout=3)
-            os.close(master)
-            os.close(slave)
+        for shell in ("/bin/sh", "/bin/bash", "/bin/dash"):
+            if not Path(shell).is_file():
+                continue
+            with self.subTest(shell=shell):
+                master, slave = pty.openpty()
+                # Prevent startup output from echoing back into the fixture shell.
+                tty.setraw(slave)
+                # The master end is a serial peer, not a controlling terminal.
+                # Disable job control: Dash otherwise loops waiting to be foreground.
+                process = subprocess.Popen([shell, "-i", "+m"], stdin=master, stdout=master,
+                                           stderr=master, start_new_session=True)
+                session = None
+                try:
+                    session = Console({"type": "serial", "device": os.ttyname(slave), "timeout": 3})
+                    self.assertEqual(session.execute("printf serial-ok"), (0, "serial-ok"))
+                    session.close()
+                    self.assertFalse(session.serial.is_open)
+                finally:
+                    if session:
+                        session.close()
+                    process.terminate()
+                    try:
+                        process.wait(timeout=0.5)
+                    except subprocess.TimeoutExpired:
+                        process.kill()  # Interactive shells may ignore TERM; this PID is our fixture.
+                        process.wait(timeout=3)
+                    os.close(master)
+                    os.close(slave)
 
 
 class CredentialTests(unittest.TestCase):

@@ -26,7 +26,7 @@ For a configured native debugger, the optional repository helper runs a bounded 
 embedded-ddd --profile /path/to/board.json gdb-snapshot --pid 1234 --output /path/to/new-run
 ```
 
-Resolve the helper from its configured path or the real skill checkout's `bin/embedded-ddd`. It checks process identity and existing tracers, disables automatic GDB init scripts, captures all-thread stacks, detaches and checks the same process has resumed. A failed recovery check remains unresolved even if GDB returned zero. If the helper is unavailable, perform these steps using ordinary GDB commands and the project connection tools.
+Use the configured helper path, or `../.embedded-ddd/bin/embedded-ddd` relative to this skill directory when the optional helper is installed. It checks process identity and existing tracers, disables automatic GDB init scripts, captures all-thread stacks, detaches and checks the same process has resumed. A failed recovery check remains unresolved even if GDB returned zero. If the helper is unavailable, perform these steps using ordinary GDB commands and the project connection tools.
 
 For breakpoints, stepping or calls, define the hypothesis, stop location, expected evidence and cleanup before starting. Do not hold an unrelated lock or wait for a stopped thread. Inspect a known, side-effect-free expression before considering a call; C/C++ getters can also have side effects. Record injected events as simulated inputs. They do not prove the real external input path works.
 

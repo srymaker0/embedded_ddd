@@ -20,7 +20,7 @@ The optional repository CLI provides bounded multi-source collection:
 embedded-ddd --profile /path/to/board.json collect --output /path/to/new-run --duration 30
 ```
 
-Resolve the helper from its configured location or the real skill checkout's `bin/embedded-ddd`. Inspect `--help` for options. It records source availability independently and continues collecting a remote log when a local serial file fails. It does not classify business health or provide background notifications after the task ends. When unavailable, carry out the same observations with the existing project and system tools.
+Use the configured helper path, or `../.embedded-ddd/bin/embedded-ddd` relative to this skill directory when the optional helper is installed. Inspect `--help` for options. It records source availability independently and continues collecting a remote log when a local serial file fails. It does not classify business health or provide background notifications after the task ends. When unavailable, carry out the same observations with the existing project and system tools.
 
 ## Follow the evidence
 

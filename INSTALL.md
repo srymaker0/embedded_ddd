@@ -1,85 +1,103 @@
 # Install embedded-ddd
 
-These instructions work for a person or an AI assistant installing from <https://github.com/srymaker0/embedded_ddd>.
+Install from <https://github.com/srymaker0/embedded_ddd> into the application project where you want to use the skills.
 
 ## For AI assistants
 
-Install for the assistant the user is currently using. Default to user scope; use project scope when requested. Install for both clients only when the user asks for both.
+1. Work from the application project directory. Use the project installation command below to download the three skills from GitHub into `.agents/skills/`. Preserve unrelated skills and any local edits to an existing installation.
+2. Verify that each skill has a readable `SKILL.md` in its own directory. The installed directories must contain the files themselves and remain usable after the temporary download is removed.
+3. Finish the default installation after copying the three skills. Use the project's existing connection, deployment and debugging tools. Install the optional helper only when the user requests it or a specific device task needs capabilities that the existing tools do not provide. Reuse a suitable installed helper environment before creating another one.
+4. Check skill discovery and report the three installed paths. If a helper was separately requested or needed, run its `--help` and report its location as well. Start a new session if the client has not refreshed its skills.
 
-1. Find an existing checkout of this repository or clone it into a persistent location. If the user has not chosen a location, use `~/.local/share/embedded-ddd`. Check an existing directory's Git remote before reusing it; preserve local changes.
-2. Run the appropriate command below to link the three skills. The script prints each installed path and refuses to replace a different existing skill. Resolve a conflict with the user rather than deleting their skill.
-3. On Linux, also set up the command-line tool below unless the user requests skills only. On other hosts, install the skills and report that the helper's supported environment is Linux, including a Linux environment within WSL.
-4. Verify that each printed path contains a readable `SKILL.md`. If the helper was installed, run `bin/embedded-ddd --help`. Report the installed skills, their location and whether the helper is available. If the client does not discover them, restart the client or start a new session.
+Installation does not require a device connection or credentials. Configure a target when the user requests a device task.
 
-Installation requires no device connection or device credentials. Board setup happens when the user requests a device task.
+## Install the skills
 
-## Get the repository
-
-Use Git and Python 3.8 or later on a host that supports symbolic links. The following commands use a POSIX shell:
+With Node.js, npm and Git available, run this command from your application project:
 
 ```sh
-git clone https://github.com/srymaker0/embedded_ddd.git embedded-ddd
-cd embedded-ddd
+npx --yes skills add srymaker0/embedded_ddd --agent codex \
+  --skill embedded-linux-deploy embedded-linux-diagnostics embedded-linux-debug --copy --yes
 ```
 
-Keep the checkout available: installed skills link to its files. The checkout can live wherever you normally keep development tools.
+The installer downloads the skills and places their files directly in:
 
-## Register the skills
+```text
+your-project/
+└── .agents/
+    └── skills/
+        ├── embedded-linux-deploy/
+        │   ├── SKILL.md
+        │   ├── agents/
+        │   └── references/
+        ├── embedded-linux-diagnostics/
+        │   ├── SKILL.md
+        │   ├── agents/
+        │   └── references/
+        └── embedded-linux-debug/
+            ├── SKILL.md
+            ├── agents/
+            └── references/
+```
 
-Choose the command for your client:
+These are ordinary directories. Default installation adds only these three skills; it does not create a Python environment. Codex discovers them through its project skill directory. A permanent repository checkout and skill symlinks are unnecessary.
 
-| Client | Install for your user | Default destination |
-| --- | --- | --- |
-| Codex | `python3 scripts/link_skills.py --agent codex` | `~/.agents/skills/` |
-| Claude Code | `python3 scripts/link_skills.py --agent claude` | `~/.claude/skills/` |
+The installer records the source of each skill in `skills-lock.json` at the project root. Keep that file with the skills when sharing the installation with a team. For a private local installation, use the application's local Git exclude file to ignore these three directories, the optional `.agents/skills/.embedded-ddd/` environment and `skills-lock.json` as needed. Preserve existing ignore rules.
 
-Claude Code's `CLAUDE_CONFIG_DIR`, when set, replaces `~/.claude` for user installation. These paths follow the [Codex skill documentation](https://developers.openai.com/codex/skills/) and [Claude Code skill documentation](https://code.claude.com/docs/en/skills).
-
-To install only for one project, add its directory:
+Check discovery with:
 
 ```sh
-python3 scripts/link_skills.py --agent codex --project /path/to/project
+npx --yes skills list --agent codex
 ```
 
-Use `--agent claude` for Claude Code. Project installations use `.agents/skills/` for Codex and `.claude/skills/` for Claude Code. Add `--git-exclude` if you want the links ignored locally in that Git repository.
-
-Repeated installation from the same checkout is safe. The installer preserves unrelated skills and reports a conflict if one of these names already points elsewhere:
-
-- `embedded-linux-deploy`
-- `embedded-linux-diagnostics`
-- `embedded-linux-debug`
+If Node.js is unavailable, use Codex's skill installer with this repository's `master` branch, the three `skills/embedded-linux-*` paths and an explicit destination of `<project>/.agents/skills`. It copies the same skill directories. Track updates manually when using that route.
 
 ## Command-line tool
 
-On a Linux development host, run these commands from the checkout:
+The skills work with existing project tools. Set up the shared `embedded-ddd` helper only when a device task needs it or you choose to use it. It supports Linux, including WSL, with Python 3.8 or later.
+
+If a suitable environment already provides `embedded-ddd`, use that command. Otherwise, the following commands create an optional environment inside the project's skill directory. Run them from the application project:
 
 ```sh
-python3 -m venv .venv
-.venv/bin/python -m pip install --upgrade pip
-.venv/bin/python -m pip install -e '.[console,serial]'
-bin/embedded-ddd --help
+python3 -m venv .agents/skills/.embedded-ddd
+.agents/skills/.embedded-ddd/bin/python -m pip install --upgrade pip
+.agents/skills/.embedded-ddd/bin/python -m pip install \
+  'embedded-ddd[console,serial] @ git+https://github.com/srymaker0/embedded_ddd.git@master'
+.agents/skills/.embedded-ddd/bin/embedded-ddd --help
 ```
 
-The launcher uses this virtual environment automatically. The assistant can find it through the installed skill's real source path; adding it to `PATH` is optional. If a dependency cannot be installed, report the error and whether skill registration succeeded. The skills can also work with existing project tools.
+This installs the Python package and its dependencies inside `.agents/skills/.embedded-ddd/`. The three skills share this environment; no persistent source checkout is needed. Use `.agents/skills/.embedded-ddd/bin/embedded-ddd` from the project directory, or `../.embedded-ddd/bin/embedded-ddd` relative to an installed skill directory. Adding the tool to `PATH` is optional.
 
-SSH and file transfers use system OpenSSH clients. Telnet needs a system `telnet` client. Direct serial uses the installed PySerial and Pexpect dependencies; reading an existing terminal log does not require owning the serial port. Install a matching GDB only when a debugging task needs it.
+SSH and file transfers use system OpenSSH clients. Telnet needs a system `telnet` client. Direct serial uses PySerial and Pexpect; reading an existing terminal log does not require owning the serial port. Install a matching GDB when a debugging task needs it.
 
-The target needs a POSIX shell and `/proc`. Remote log collection uses `stat`, `tail` and `base64`; uploads use `sha256sum`. Native GDB snapshots also need a compatible GDB and `timeout` with `-s TERM` support. `inspect` checks the connection and reports available target tools before a device task.
+The target needs a POSIX shell and `/proc`. Remote log collection uses `stat`, `tail` and `base64`; uploads use `sha256sum`. Native GDB snapshots need a compatible GDB and `timeout` with `-s TERM` support. `inspect` checks the connection and reports available target tools before a device task.
 
-If installation fails because `venv` is unavailable, install your distribution's Python venv package, then repeat the helper setup. If the skills do not appear, check the destination printed by the installer, any custom `CLAUDE_CONFIG_DIR`, and whether the checkout was moved or deleted. Reopen the client after correcting the links.
-
-For profiles and commands, see the [README](README.md#optional-command-line-tool) or [中文说明](README.zh-CN.md#可选命令行工具).
+If `venv` is unavailable, install your distribution's Python venv package and repeat the helper setup. If dependency installation fails, report the error and whether the skills themselves were installed successfully. Profiles and command examples are in the [README](README.md#optional-command-line-tool) and [中文说明](README.zh-CN.md#可选命令行工具).
 
 ## Update
 
-In a clean checkout, fetch updates with:
+Preserve any local skill edits before updating. From the application project, update these three skills:
 
 ```sh
-git pull --ff-only
+npx --yes skills update embedded-linux-deploy embedded-linux-diagnostics embedded-linux-debug --project --yes
 ```
 
-If you installed the helper, rerun its `pip install -e '.[console,serial]'` command to update dependencies. The skill links already point to the updated files; rerun the registration command if the set of skills changes. Preserve local modifications and resolve them before updating.
+If you installed the helper, update its package separately:
+
+```sh
+.agents/skills/.embedded-ddd/bin/python -m pip install --upgrade \
+  'embedded-ddd[console,serial] @ git+https://github.com/srymaker0/embedded_ddd.git@master'
+.agents/skills/.embedded-ddd/bin/embedded-ddd --help
+```
+
+Each project owns its installed copies and updates independently.
 
 ## Uninstall
 
-Remove the three skill links from the destination used at installation, after checking that they point to this checkout. If you used `--git-exclude`, remove their entries from that repository's local Git exclude file. Once no installed links depend on it, you can remove the checkout and its `.venv`.
+From the application project:
+
+```sh
+npx --yes skills remove embedded-linux-deploy embedded-linux-diagnostics embedded-linux-debug --agent codex --yes
+```
+
+If you installed the optional helper, remove `.agents/skills/.embedded-ddd/` after confirming it is this installation's virtual environment. For a manual skill installation, remove the three skill directories directly. Preserve unrelated skills, lockfile entries and Git exclude rules.

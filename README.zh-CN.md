@@ -35,10 +35,17 @@ DDD 表示 **Deploy（部署）、Diagnostics（诊断）、Debug（调试）**�
 
 ```text
 请从 https://github.com/srymaker0/embedded_ddd 安装 embedded-ddd，
-按照仓库中的 INSTALL.md，为 Codex 完成安装。
+按照仓库中的 INSTALL.md，在当前项目中为 Codex 完成安装。
 ```
 
-默认安装到当前用户的技能目录，供多个项目使用。只想在当前项目使用时，加上“仅为当前项目安装”。手动安装、更新和卸载方法见 [INSTALL.md](INSTALL.md)。
+三个技能目录直接安装在当前项目的 `.agents/skills/` 下。也可以在项目目录执行：
+
+```sh
+npx --yes skills add srymaker0/embedded_ddd --agent codex \
+  --skill embedded-linux-deploy embedded-linux-diagnostics embedded-linux-debug --copy --yes
+```
+
+默认只安装三项技能，优先使用项目已有工具；具体设备任务需要时，再安装辅助工具。工具安装、更新和卸载方法见 [INSTALL.md](INSTALL.md)。
 
 随后在正在开发的应用项目中直接描述任务：
 
@@ -64,15 +71,15 @@ Codex 可以根据任务自动选择技能，也可以通过 `$embedded-linux-de
 
 ### 可选命令行工具
 
-技能可以使用开发环境中已有的工具。项目也提供 `embedded-ddd` 辅助工具，在 Linux 开发机上执行连接、传输、日志采集、部署观察和板端 GDB 快照，见[安装方法](INSTALL.md#command-line-tool)。
+技能优先使用开发环境中已有的工具。现有工具无法满足具体设备任务时，可按需使用 `embedded-ddd` 辅助工具，在 Linux 开发机上执行连接、传输、日志采集、部署观察和板端 GDB 快照。已有适用的运行环境时直接复用，需要另行安装时见[安装方法](INSTALL.md#command-line-tool)。
 
-选择 [SSH](examples/ssh.json)、[Telnet](examples/telnet.json) 或[串口](examples/serial.json)配置示例，复制到私有路径并替换占位信息，然后执行：
+选择 [SSH](examples/ssh.json)、[Telnet](examples/telnet.json) 或[串口](examples/serial.json)配置示例，复制到私有路径并替换占位信息，然后在应用项目目录执行：
 
 ```sh
-bin/embedded-ddd --profile /path/to/board.json inspect
-bin/embedded-ddd --profile /path/to/board.json collect --output output/logs-001 --duration 30
-bin/embedded-ddd --profile /path/to/board.json deploy --output output/deploy-001
-bin/embedded-ddd --profile /path/to/board.json gdb-snapshot --pid 1234 --output output/debug-001
+.agents/skills/.embedded-ddd/bin/embedded-ddd --profile /path/to/board.json inspect
+.agents/skills/.embedded-ddd/bin/embedded-ddd --profile /path/to/board.json collect --output output/logs-001 --duration 30
+.agents/skills/.embedded-ddd/bin/embedded-ddd --profile /path/to/board.json deploy --output output/deploy-001
+.agents/skills/.embedded-ddd/bin/embedded-ddd --profile /path/to/board.json gdb-snapshot --pid 1234 --output output/debug-001
 ```
 
 每次运行使用新的输出目录。配置可以执行其中指定的命令，应使用可信的本机配置。凭据通过 SSH 配置或单独的私有密码文件保存，分享日志前先移除私人信息。
@@ -81,13 +88,16 @@ bin/embedded-ddd --profile /path/to/board.json gdb-snapshot --pid 1234 --output 
 
 ## 开发与贡献
 
-安装辅助工具后运行主机测试：
+在用于开发 embedded-ddd 的仓库副本中创建虚拟环境，然后运行主机测试：
 
 ```sh
+python3 -m venv .venv
+.venv/bin/python -m pip install --upgrade pip
+.venv/bin/python -m pip install -e '.[console,serial]'
 .venv/bin/python -m unittest discover -s tests -v
 ```
 
-完整测试需要 GCC、GDB、OpenSSH 客户端与服务端、Telnet 客户端和 curl；缺少可选工具时会显示跳过。测试覆盖连接、传输、日志连续性、部署生命周期、调试后的恢复和技能安装。[评估场景](evals/scenarios.json)可用于进一步检查 AI 的决策行为。
+完整测试需要 GCC、GDB、OpenSSH 客户端与服务端、Telnet 客户端和 curl；缺少可选工具时会显示跳过。测试覆盖连接、传输、日志连续性、部署生命周期和调试后的恢复。[评估场景](evals/scenarios.json)可用于进一步检查 AI 的决策行为。
 
 欢迎通过 [GitHub Issues](https://github.com/srymaker0/embedded_ddd/issues) 和 pull request 反馈问题或贡献改进。反馈时请提供开发机与设备环境、复现步骤，以及移除私人信息后的相关日志。
 

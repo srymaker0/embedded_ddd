@@ -35,10 +35,17 @@ Paste this into Codex:
 
 ```text
 Install embedded-ddd from https://github.com/srymaker0/embedded_ddd
-for Codex. Follow INSTALL.md in the repository.
+for Codex in this project. Follow INSTALL.md in the repository.
 ```
 
-Installation defaults to your user account so the skills are available across projects. Add “install for this project only” to limit their scope. [INSTALL.md](INSTALL.md) covers manual installation, updates and removal.
+The three skill directories are installed directly in the project's `.agents/skills/`. You can also install them from the project directory with:
+
+```sh
+npx --yes skills add srymaker0/embedded_ddd --agent codex \
+  --skill embedded-linux-deploy embedded-linux-diagnostics embedded-linux-debug --copy --yes
+```
+
+Default installation adds only the three skills. They use your existing tools; install the optional helper when a device task needs it. [INSTALL.md](INSTALL.md) covers helper setup, updates and removal.
 
 Then work in your application project:
 
@@ -64,15 +71,15 @@ The current skills cover **embedded Linux**. Debugging supports native GDB, host
 
 ### Optional command-line tool
 
-The skills work with existing tools. The included `embedded-ddd` helper automates connections, transfers, log collection, deployment observation and native GDB snapshots on a Linux development host. See [setup instructions](INSTALL.md#command-line-tool).
+The skills work with existing tools. When those tools do not cover a device task, the optional `embedded-ddd` helper provides connections, transfers, log collection, deployment observation and native GDB snapshots on a Linux development host. Reuse a suitable installed helper or follow the [setup instructions](INSTALL.md#command-line-tool) when needed.
 
-Copy an [SSH](examples/ssh.json), [Telnet](examples/telnet.json) or [serial](examples/serial.json) profile to a private path, replace the placeholders, then run:
+Copy an [SSH](examples/ssh.json), [Telnet](examples/telnet.json) or [serial](examples/serial.json) profile to a private path, replace the placeholders, then run from your application project:
 
 ```sh
-bin/embedded-ddd --profile /path/to/board.json inspect
-bin/embedded-ddd --profile /path/to/board.json collect --output output/logs-001 --duration 30
-bin/embedded-ddd --profile /path/to/board.json deploy --output output/deploy-001
-bin/embedded-ddd --profile /path/to/board.json gdb-snapshot --pid 1234 --output output/debug-001
+.agents/skills/.embedded-ddd/bin/embedded-ddd --profile /path/to/board.json inspect
+.agents/skills/.embedded-ddd/bin/embedded-ddd --profile /path/to/board.json collect --output output/logs-001 --duration 30
+.agents/skills/.embedded-ddd/bin/embedded-ddd --profile /path/to/board.json deploy --output output/deploy-001
+.agents/skills/.embedded-ddd/bin/embedded-ddd --profile /path/to/board.json gdb-snapshot --pid 1234 --output output/debug-001
 ```
 
 Use a new output directory for each run. Profiles execute configured commands, so use trusted local configuration. Store credentials in SSH configuration or a separate private password file, and review collected logs before sharing.
@@ -81,13 +88,16 @@ Command access and file transfer are configured separately. Transfers support SF
 
 ## Development
 
-After installing the helper, run the host tests:
+From a checkout used to develop embedded-ddd, create a virtual environment and run the host tests:
 
 ```sh
+python3 -m venv .venv
+.venv/bin/python -m pip install --upgrade pip
+.venv/bin/python -m pip install -e '.[console,serial]'
 .venv/bin/python -m unittest discover -s tests -v
 ```
 
-The full suite uses GCC, GDB, OpenSSH clients and server, a Telnet client, and curl. Missing optional tools are reported as skips. Tests cover connections, transfers, log continuity, deployment lifecycle, debugger recovery and skill installation. [Evaluation scenarios](evals/scenarios.json) provide cases for reviewing assistant behavior.
+The full suite uses GCC, GDB, OpenSSH clients and server, a Telnet client, and curl. Missing optional tools are reported as skips. Tests cover connections, transfers, log continuity, deployment lifecycle and debugger recovery. [Evaluation scenarios](evals/scenarios.json) provide cases for reviewing assistant behavior.
 
 Report problems or propose improvements through [GitHub Issues](https://github.com/srymaker0/embedded_ddd/issues) and pull requests. Include the host and target environment, reproduction steps, and relevant logs with private data removed.
 
