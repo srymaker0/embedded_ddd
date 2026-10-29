@@ -1,7 +1,7 @@
 include INSTALL.md README.zh-CN.md
 include bin/embedded-ddd
 recursive-include assets *.svg
-recursive-include skills *.md *.yaml
-recursive-include examples *.json
-recursive-include evals *.json
+recursive-include skills *.md *.yaml *.json
+recursive-include examples *.md *.py *.c
+recursive-include evals *.md *.py *.json
 recursive-include tests *.py *.c

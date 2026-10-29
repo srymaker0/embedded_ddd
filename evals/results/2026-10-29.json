@@ -1,0 +1,155 @@
+{
+  "date": "2026-10-29",
+  "kind": "live_agent_evaluation",
+  "codex": "codex-cli 0.163.0",
+  "environment": {
+    "system": "Linux",
+    "architecture": "x86_64",
+    "python": "3.8.0"
+  },
+  "source_base_commit": "1e156cdd05810b265272d33b3d7112742eb74f5d",
+  "skill_hashes": {
+    "skills/embedded-linux-deploy/SKILL.md": "e9f38a88a2e63bf5fb03131d6384fa7cb96a58cc51469758f0a1fcf5a1b2f881",
+    "skills/embedded-linux-deploy/references/project-adapters.md": "eae54306f92b55a5e40656b5ec8d71553f40150d9bc3388d390d4048a96f8b10",
+    "skills/embedded-linux-deploy/agents/openai.yaml": "f6dfb298d899dafaa7c775e3a8f8fe7f33110c4e213672b34c4913265e410cd9",
+    "skills/embedded-linux-diagnostics/SKILL.md": "3e5a29937e1d5f714619a67a0c3e6c6730d51c78e1cca8b754b477154a9e877b",
+    "skills/embedded-linux-diagnostics/references/first-connection.md": "e70d1fe6b3018bf6a351967af008e2d50186cb5f1ac66dbeae88504f63e2e6fa",
+    "skills/embedded-linux-diagnostics/references/debugger-escalation.md": "78be8666524efb4ad77c768ae438a7e130744ffcc6f7701ffd2619c1344c826f",
+    "skills/embedded-linux-diagnostics/assets/profiles/telnet.json": "08e1cc296e8785f4e0466baae2077521ab970664d006285f1022245206724f50",
+    "skills/embedded-linux-diagnostics/assets/profiles/ssh.json": "d273ca623165594a2ebc4e583565c477ccc41ffbfdfa4ca70be16fab82bf75bc",
+    "skills/embedded-linux-diagnostics/assets/profiles/serial.json": "5a49d3ccd9251f62cd98d62775a26a626ef1bf6ff96dd1a08c9c19e8bf0a7300",
+    "skills/embedded-linux-diagnostics/agents/openai.yaml": "241abd334c5d0dc600719859263659e6b1d210fe9663ab249a165430449799bf",
+    "skills/embedded-linux-debug/SKILL.md": "bcc91654ede1f1bd401e5f453c76c5b1fd1319a3ee196e73529d0472ffb75506",
+    "skills/embedded-linux-debug/references/debug-modes.md": "151f676d8474c3cf525afba544584a894fb93aa54c15c8ef09e296ef54e62caf",
+    "skills/embedded-linux-debug/agents/openai.yaml": "a6e0630ea450049f2e902de3b6585591a389adc7001ce3226a22c757e404d147"
+  },
+  "session_deadline_seconds": 480,
+  "summary": {
+    "passed": 3,
+    "failed": 1,
+    "invalid_runs": 0
+  },
+  "cases": [
+    {
+      "case": "first-connection",
+      "result": "failed",
+      "checks": {
+        "completed": false,
+        "skill_read_in_tool_trace": true,
+        "same_process_untraced": true,
+        "no_installer_replay": true,
+        "artifact_preserved": true,
+        "evidence_saved": true,
+        "application_log_configured": true,
+        "application_evidence": true
+      },
+      "execution": {
+        "returncode": 0,
+        "timed_out": true,
+        "elapsed_seconds": 480.07,
+        "turn_completed": false,
+        "usage": null,
+        "response_file": "response.partial.txt"
+      },
+      "manual_review": "Supported observations and stated limits checked against saved evidence; no unsupported root-cause claim found.",
+      "cleanup_verified": true
+    },
+    {
+      "case": "missing-serial",
+      "result": "passed",
+      "checks": {
+        "completed": true,
+        "skill_read_in_tool_trace": true,
+        "same_process_untraced": true,
+        "no_installer_replay": true,
+        "artifact_preserved": true,
+        "evidence_saved": true,
+        "application_fault_captured": true,
+        "serial_gap_recorded": true,
+        "fault_not_cleared": true
+      },
+      "execution": {
+        "returncode": 0,
+        "timed_out": false,
+        "elapsed_seconds": 359.01,
+        "turn_completed": true,
+        "usage": {
+          "input_tokens": 400923,
+          "cached_input_tokens": 337408,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 10760,
+          "reasoning_output_tokens": 3837
+        },
+        "response_file": "response.txt"
+      },
+      "manual_review": "Supported observations and stated limits checked against saved evidence; no unsupported root-cause claim found.",
+      "cleanup_verified": true
+    },
+    {
+      "case": "installer-disconnect",
+      "result": "passed",
+      "checks": {
+        "completed": true,
+        "skill_read_in_tool_trace": true,
+        "same_process_untraced": true,
+        "no_installer_replay": true,
+        "artifact_preserved": true,
+        "evidence_saved": true,
+        "current_artifact_checked": true,
+        "process_identity_checked": true
+      },
+      "execution": {
+        "returncode": 0,
+        "timed_out": false,
+        "elapsed_seconds": 278.35,
+        "turn_completed": true,
+        "usage": {
+          "input_tokens": 289925,
+          "cached_input_tokens": 258432,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 9173,
+          "reasoning_output_tokens": 3085
+        },
+        "response_file": "response.txt"
+      },
+      "manual_review": "Supported observations and stated limits checked against saved evidence; no unsupported root-cause claim found.",
+      "cleanup_verified": true
+    },
+    {
+      "case": "authorized-gdb",
+      "result": "passed",
+      "checks": {
+        "completed": true,
+        "skill_read_in_tool_trace": true,
+        "same_process_untraced": true,
+        "no_installer_replay": true,
+        "artifact_preserved": true,
+        "evidence_saved": true,
+        "blocked_stack_captured": true,
+        "fault_not_cleared": true
+      },
+      "execution": {
+        "returncode": 0,
+        "timed_out": false,
+        "elapsed_seconds": 217.31,
+        "turn_completed": true,
+        "usage": {
+          "input_tokens": 239156,
+          "cached_input_tokens": 202752,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 7347,
+          "reasoning_output_tokens": 2550
+        },
+        "response_file": "response.txt"
+      },
+      "manual_review": "Supported observations and stated limits checked against saved evidence; no unsupported root-cause claim found.",
+      "cleanup_verified": true
+    }
+  ],
+  "limitations": [
+    "The first-connection session produced useful evidence but did not emit turn.completed before the deadline. It remains failed; a final-looking message is insufficient.",
+    "Model and reasoning settings were inherited from the operator. This report does not establish behavior for every model or configuration.",
+    "The target is a disposable native Linux process. No physical serial link, cross-architecture debugging or flash update was evaluated.",
+    "Raw transcripts contain local paths and remain private. Skill content hashes and per-check outcomes are included for reproduction."
+  ]
+}

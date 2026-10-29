@@ -9,7 +9,7 @@ Install from <https://github.com/srymaker0/embedded_ddd> into the application pr
 3. Finish the default installation after copying the three skills. Use the project's existing connection, deployment and debugging tools. Install the optional helper only when the user requests it or a specific device task needs capabilities that the existing tools do not provide. Reuse a suitable installed helper environment before creating another one.
 4. Check skill discovery and report the three installed paths. If a helper was separately requested or needed, run its `--help` and report its location as well. Start a new session if the client has not refreshed its skills.
 
-Installation does not require a device connection or credentials. Configure a target when the user requests a device task.
+Installation does not require a device connection or credentials. Configure a target when the user requests a device task. The diagnostics skill ships a [first-connection guide](skills/embedded-linux-diagnostics/references/first-connection.md) and SSH, Telnet and serial templates; no source checkout is needed to use them.
 
 ## Install the skills
 
@@ -33,6 +33,7 @@ your-project/
         ├── embedded-linux-diagnostics/
         │   ├── SKILL.md
         │   ├── agents/
+        │   ├── assets/profiles/
         │   └── references/
         └── embedded-linux-debug/
             ├── SKILL.md
@@ -70,7 +71,7 @@ This installs the Python package and its dependencies inside `.agents/skills/.em
 
 SSH and file transfers use system OpenSSH clients. Telnet needs a system `telnet` client. Direct serial uses PySerial and Pexpect; reading an existing terminal log does not require owning the serial port. Install a matching GDB when a debugging task needs it.
 
-The target needs a POSIX shell and `/proc`. Remote log collection uses `stat`, `tail` and `base64`; uploads use `sha256sum`. Native GDB snapshots need a compatible GDB and `timeout` with `-s TERM` support. `inspect` checks the connection and reports available target tools before a device task.
+The target needs a POSIX shell and `/proc`. Remote log collection uses `stat`, `tail` and `base64`; uploads use `sha256sum`. Native GDB snapshots need a compatible GDB and `timeout` with `-s TERM` support. Use `inspect --local --for collect` to check host prerequisites without connecting, then `inspect --for collect` to check target identity and log readability. Other operation choices are `connect` (default), `put`, `deploy` and `gdb-snapshot`. Missing prerequisites produce exit 2 and JSON details; readiness does not mean functional acceptance.
 
 If `venv` is unavailable, install your distribution's Python venv package and repeat the helper setup. If dependency installation fails, report the error and whether the skills themselves were installed successfully. Profiles and command examples are in the [README](README.md#optional-command-line-tool) and [中文说明](README.zh-CN.md#可选命令行工具).
 

@@ -63,9 +63,11 @@ Use GDB to inspect the blocked threads, then detach and verify the process resum
 
 Codex can select the relevant skill automatically. Invoke one directly with `$embedded-linux-deploy`, `$embedded-linux-diagnostics` or `$embedded-linux-debug`.
 
+For a project's first device, ask: “Set up this Linux target using the project's connection details, check what diagnostics are available, and save a reusable local configuration.” The diagnostics skill includes [first-use guidance and connection templates](skills/embedded-linux-diagnostics/references/first-connection.md). The assistant reuses known details and asks for missing connection or project facts; an address alone cannot identify your installer or acceptance criteria.
+
 ## Work with your development environment
 
-Use your existing SSH aliases, keys, terminal logs and deployment scripts. Device details can come from the conversation, project configuration or a private [connection profile](examples/).
+Use your existing SSH aliases, keys, terminal logs and deployment scripts. Device details can come from the conversation, project configuration or a private [connection profile](skills/embedded-linux-diagnostics/assets/profiles/).
 
 The current skills cover **embedded Linux**. Debugging supports native GDB, host GDB with gdbserver, and offline cores. Live debugging pauses the selected process. RTOS and bare-metal targets are outside the current scope.
 
@@ -73,10 +75,12 @@ The current skills cover **embedded Linux**. Debugging supports native GDB, host
 
 The skills work with existing tools. When those tools do not cover a device task, the optional `embedded-ddd` helper provides connections, transfers, log collection, deployment observation and native GDB snapshots on a Linux development host. Reuse a suitable installed helper or follow the [setup instructions](INSTALL.md#command-line-tool) when needed.
 
-Copy an [SSH](examples/ssh.json), [Telnet](examples/telnet.json) or [serial](examples/serial.json) profile to a private path, replace the placeholders, then run from your application project:
+Copy an [SSH](skills/embedded-linux-diagnostics/assets/profiles/ssh.json), [Telnet](skills/embedded-linux-diagnostics/assets/profiles/telnet.json) or [serial](skills/embedded-linux-diagnostics/assets/profiles/serial.json) profile to a private path, replace the placeholders, then run from your application project:
 
 ```sh
 .agents/skills/.embedded-ddd/bin/embedded-ddd --profile /path/to/board.json inspect
+.agents/skills/.embedded-ddd/bin/embedded-ddd --profile /path/to/board.json inspect --local --for collect
+.agents/skills/.embedded-ddd/bin/embedded-ddd --profile /path/to/board.json inspect --for collect
 .agents/skills/.embedded-ddd/bin/embedded-ddd --profile /path/to/board.json collect --output output/logs-001 --duration 30
 .agents/skills/.embedded-ddd/bin/embedded-ddd --profile /path/to/board.json deploy --output output/deploy-001
 .agents/skills/.embedded-ddd/bin/embedded-ddd --profile /path/to/board.json gdb-snapshot --pid 1234 --output output/debug-001
@@ -85,6 +89,18 @@ Copy an [SSH](examples/ssh.json), [Telnet](examples/telnet.json) or [serial](exa
 Use a new output directory for each run. Profiles execute configured commands, so use trusted local configuration. Store credentials in SSH configuration or a separate private password file, and review collected logs before sharing.
 
 Command access and file transfer are configured separately. Transfers support SFTP, SCP, SSH streams and HTTP uploads with SHA256 verification. Deployment uses the project's installer and its update and rollback behavior. Remote GDB and core analysis use standard debugger tools under skill guidance.
+
+`inspect --for` checks the prerequisites for `connect`, `collect`, `put`, `deploy` or `gdb-snapshot` and returns JSON. A missing serial log is reported independently of an available application log. `--local` performs no target connection and leaves target readiness unknown. Inspection never runs an installer or attaches a debugger; its output lists the checks that still need a real operation.
+
+## Try the complete loop
+
+The [Linux lab](examples/README.md) builds a small application and starts a temporary SSH server on localhost. It deploys two versions through an example project installer, verifies hashes and heartbeats, injects a stalled worker, collects its application log despite a missing serial file, captures a GDB stack, and verifies recovery. It stops its application and server and removes its temporary keys afterward.
+
+```sh
+.venv/bin/python examples/linux_lab.py run --output output/linux-lab-001
+```
+
+Run this from a development checkout after the setup below. The example needs no physical board. Its results demonstrate Linux software behavior; real board architecture, serial wiring, watchdogs and firmware update behavior still require target validation.
 
 ## Development
 
@@ -97,7 +113,11 @@ python3 -m venv .venv
 .venv/bin/python -m unittest discover -s tests -v
 ```
 
-The full suite uses GCC, GDB, OpenSSH clients and server, a Telnet client, and curl. Missing optional tools are reported as skips. Tests cover connections, transfers, log continuity, deployment lifecycle and debugger recovery. [Evaluation scenarios](evals/scenarios.json) provide cases for reviewing assistant behavior.
+The full suite uses GCC, GDB, OpenSSH clients and server, a Telnet client, and curl. Missing optional tools are reported as skips. Tests cover connections, transfers, readiness checks, log continuity, deployment lifecycle and debugger recovery. CI also runs the complete localhost lab.
+
+[Live skill evaluations](evals/README.md) run four independent Codex sessions against disposable targets and grade their tool traces, saved evidence and resulting process state. They use model quota and run only when explicitly invoked; they are separate from host tests and are not run automatically by CI. The remaining [scenario rubric](evals/scenarios.json) identifies cases that still require manual evaluation.
+
+The [2026-10-29 evaluation](evals/results/2026-10-29.json) recorded three passes and one timeout. The first-connection behavior checks passed, but the session did not complete before its deadline and remains a failed case.
 
 Report problems or propose improvements through [GitHub Issues](https://github.com/srymaker0/embedded_ddd/issues) and pull requests. Include the host and target environment, reproduction steps, and relevant logs with private data removed.
 

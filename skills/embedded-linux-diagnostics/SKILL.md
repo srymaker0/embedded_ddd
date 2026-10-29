@@ -1,11 +1,13 @@
 ---
 name: embedded-linux-diagnostics
-description: Diagnose embedded Linux application failures, crashes, hangs, restarts and abnormal device logs using serial output, SSH or Telnet, application logs, kernel evidence and process identity. Also use to observe a device after deployment or during reproduction.
+description: Diagnose embedded Linux failures and abnormal logs using serial, SSH or Telnet, application logs and process identity. Also use for first device connection, checking available diagnostics, and observing a deployment or reproduction.
 ---
 
 # Embedded Linux diagnostics
 
 Find the failing boundary and the smallest evidence that distinguishes plausible causes. Reuse known target and connection details; ordinary diagnosis starts with read-only evidence.
+
+For a new project or an unconfigured device, read [first connection](references/first-connection.md). It includes the shipped SSH, Telnet and serial templates and checks what the intended task needs before treating the device as ready.
 
 ## Collect evidence automatically
 

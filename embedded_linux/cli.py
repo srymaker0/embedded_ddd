@@ -11,6 +11,7 @@ import time
 from pathlib import Path
 
 from .debug import native_snapshot
+from .inspect import inspect_profile
 from .logs import Collector, check_identity, write_json
 from .profile import ToolError, load_profile
 from .transfer import put_file
@@ -132,9 +133,11 @@ def deploy(profile, args):
 
 def parser():
     root = argparse.ArgumentParser(description="embedded-ddd: Deploy, Diagnostics, Debug for embedded Linux.")
-    root.add_argument("--profile", required=True, help="local target JSON; see examples")
+    root.add_argument("--profile", required=True, help="local target JSON; templates ship with the diagnostics skill")
     commands = root.add_subparsers(dest="action", required=True)
-    commands.add_parser("inspect", help="read target identity and basic command availability")
+    inspect = commands.add_parser("inspect", help="check readiness for a selected operation without running it")
+    inspect.add_argument("--for", dest="purpose", choices=("connect", "collect", "deploy", "put", "gdb-snapshot"), default="connect")
+    inspect.add_argument("--local", action="store_true", help="check host configuration only; do not connect")
     execute = commands.add_parser("exec", help="execute one explicit POSIX shell command; never retried")
     execute.add_argument("--timeout", type=int, default=15)
     execute.add_argument("command")
@@ -171,6 +174,10 @@ def main(argv=None):
             if hasattr(args, field) and (not math.isfinite(getattr(args, field)) or getattr(args, field) < 0):
                 raise ToolError(field + " must be nonnegative")
         profile = load_profile(args.profile)
+        if args.action == "inspect":
+            report = inspect_profile(profile, args.purpose, args.local)
+            print(json.dumps(report, ensure_ascii=False, indent=2))
+            return 0 if report["checks_passed"] else 2
         if args.action == "collect":
             return collect(profile, args)
         if args.action == "deploy":
@@ -183,11 +190,7 @@ def main(argv=None):
         session = connect(profile)
         try:
             check_identity(session, profile)
-            if args.action == "inspect":
-                _, text = session.execute("uname -srmo; printf 'boot_id='; cat /proc/sys/kernel/random/boot_id; "
-                                          "for t in sh stat tail base64 sha256sum timeout; do command -v \"$t\"; done")
-                print(text)
-            elif args.action == "exec":
+            if args.action == "exec":
                 code, text = session.execute(args.command, timeout=args.timeout, check=False)
                 print(text, end="")
                 return code

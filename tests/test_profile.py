@@ -12,7 +12,9 @@ from embedded_linux.profile import ToolError, load_profile
 
 class ProfileTests(unittest.TestCase):
     def test_examples_are_loadable(self):
-        for path in (Path(__file__).parents[1] / "examples").glob("*.json"):
+        directory = Path(__file__).parents[1] / "skills/embedded-linux-diagnostics/assets/profiles"
+        for name in ("ssh", "telnet", "serial"):
+            path = directory / (name + ".json")
             with self.subTest(path=path.name):
                 self.assertTrue(load_profile(path)["name"])
 
