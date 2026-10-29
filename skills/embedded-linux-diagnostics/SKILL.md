@@ -20,7 +20,7 @@ The optional repository CLI provides bounded multi-source collection:
 embedded-ddd --profile /path/to/board.json collect --output /path/to/new-run --duration 30
 ```
 
-Use the configured helper path, or `../.embedded-ddd/bin/embedded-ddd` relative to this skill directory when the optional helper is installed. Inspect `--help` for options. It records source availability independently and continues collecting a remote log when a local serial file fails. It does not classify business health or provide background notifications after the task ends. When unavailable, carry out the same observations with the existing project and system tools.
+Use the configured helper path or verify that the optional environment provides `../.embedded-ddd/bin/embedded-ddd` relative to this skill directory. Do not assume a global command or a sibling source checkout. Inspect `--help` for options. It records source availability independently and continues collecting a remote log when a local serial file fails. It does not classify business health or provide background notifications after the task ends. When unavailable, carry out the same observations with the existing project and system tools.
 
 ## Follow the evidence
 
@@ -30,10 +30,11 @@ Use the configured helper path, or `../.embedded-ddd/bin/embedded-ddd` relative 
 | Application crash/restart | Previous log segment, exit signal, kernel OOM evidence and matching core/executable |
 | Process alive but unresponsive | Thread state, wait channels, CPU/memory and bounded GDB stacks if pausing is in scope |
 | Missing event or callback | Evidence on both sides of its producer/consumer boundary; readiness, ordering and delivery |
+| Command accepted but action absent or delayed | Trace receipt, admission, driver output and observed physical action separately; state the endpoints of any latency measurement |
 | Hardware/driver symptom | Relevant kernel/driver/Proc evidence and real hardware preconditions |
 
 Use a single falsifiable hypothesis to choose the next probe. Escalate to GDB when stacks, memory or a core would resolve the uncertainty; read [debugger escalation](references/debugger-escalation.md) at that point. Do not use process-altering debugger calls as routine log inspection.
 
 ## Completion
 
-Explain the observation, supporting evidence, likely fault boundary and remaining uncertainty. Separate confirmed facts from hypotheses and missing coverage. If a fix is authorized, reproduce the affected behavior and verify it at the appropriate host/device boundary. Finish with the actual device result and any unresolved acceptance step, not merely a collection success message.
+Explain the observation, supporting evidence, likely fault boundary and remaining uncertainty. Separate confirmed facts from hypotheses and missing coverage. If a fix is authorized, verify the original trigger and expected behavior with the relevant artifact and effective configuration at the appropriate host/device boundary. State which production paths ran and which inputs were simulated. Finish with the actual device result and any unresolved acceptance step, not merely a collection success message.

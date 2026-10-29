@@ -26,7 +26,7 @@ For a configured native debugger, the optional repository helper runs a bounded 
 embedded-ddd --profile /path/to/board.json gdb-snapshot --pid 1234 --output /path/to/new-run
 ```
 
-Use the configured helper path, or `../.embedded-ddd/bin/embedded-ddd` relative to this skill directory when the optional helper is installed. It checks process identity and existing tracers, disables automatic GDB init scripts, captures all-thread stacks, detaches and checks the same process has resumed. A failed recovery check remains unresolved even if GDB returned zero. If the helper is unavailable, perform these steps using ordinary GDB commands and the project connection tools.
+Use the configured helper path or verify that the optional environment provides `../.embedded-ddd/bin/embedded-ddd` relative to this skill directory. Do not assume a global command or a sibling source checkout. It checks process identity and existing tracers, disables automatic GDB init scripts, captures all-thread stacks, detaches and checks the same process has resumed. A failed recovery check remains unresolved even if GDB returned zero. If the helper is unavailable, perform these steps using ordinary GDB commands and the project connection tools.
 
 For breakpoints, stepping or calls, define the hypothesis, stop location, expected evidence and cleanup before starting. Do not hold an unrelated lock or wait for a stopped thread. Inspect a known, side-effect-free expression before considering a call; C/C++ getters can also have side effects. Record injected events as simulated inputs. They do not prove the real external input path works.
 
@@ -35,3 +35,5 @@ For breakpoints, stepping or calls, define the hypothesis, stop location, expect
 Remove task-created breakpoints, detach/continue the intended process, stop only task-created debugger/server processes and verify application operation. On a connection loss, inspect `TracerPid`, process start and state before reconnecting or issuing recovery commands; never blindly send `SIGCONT` to an unrelated PID.
 
 GDB can replace many one-off preload/FIFO harnesses for inspection and controlled calls. Keep repeatable acceptance scenarios on existing public CLI/IPC/network interfaces when possible. A debugger snapshot or injected callback does not prove timing, networking or hardware behavior.
+
+When the task includes behavioral acceptance, rerun the original trigger through its real input after detaching and verify the expected result with the matching runtime configuration. Report the debugger experiment and that acceptance separately; if only the experiment ran, leave the real-input behavior unverified.

@@ -12,6 +12,7 @@ Complete the requested deployment and its agreed acceptance checks. Reuse confir
 1. Read the relevant project instructions and deployment entrypoint. Resolve the target, product, actual artifact, installer and success criterion before changing the device. Look for a matching profile under `~/.config/embedded-linux/` or the project's configured location, or reuse its SSH alias; ask only for missing facts that change these choices.
 2. Treat command access and file transfer as separate capabilities. Prefer the configured SSH route; Telnet and a free serial console are supported alternatives. File transfer can use SCP/SFTP, legacy SCP when explicitly selected, SSH streaming, or a project-owned HTTP/TFTP/NFS adapter. An SCP client alone does not establish interactive command access.
 3. Check target identity and available space, then identify the log sources and artifact/receipt checks. A process being present does not prove the requested feature works.
+4. When producing a deliverable, check the source checkout, build configuration and actual package contents. Follow [build and artifact provenance](references/project-adapters.md#build-and-artifact-provenance) when source or dependencies changed; a working component copied onto a board does not establish that the formal build includes it.
 
 When adapting an existing project or configuring an unusual transfer route, read [project adapters](references/project-adapters.md). Do not load adapter details for an already configured target.
 
@@ -24,10 +25,11 @@ When adapting an existing project or configuring an unusual transfer route, read
   embedded-ddd --profile /path/to/board.json deploy --output /path/to/new-run
   ```
 
-  The helper executes `deploy.argv` in `deploy.cwd`, collects bounded evidence before/during/after the command, and runs the optional project verification command. Use the configured helper path, or `../.embedded-ddd/bin/embedded-ddd` relative to this skill directory when the optional helper is installed. The skills also work with the project's own tools when this helper is unavailable.
+  The helper executes `deploy.argv` in `deploy.cwd`, collects bounded evidence before/during/after the command, and runs the optional project verification command. Use its configured path or verify that the optional environment provides `../.embedded-ddd/bin/embedded-ddd` relative to this skill directory. Do not assume a global command or a sibling source checkout. The skills also work with the project's own tools when this helper is unavailable.
 - If the developer runs the installer, use the project's observer before telling them to start. Bind observation to their actual checkout, target and deployment report. Continue until its terminal result and requested observation window, timeout or cancellation. A completed chat does not provide persistent background monitoring.
 - If the serial source is missing, empty, overwritten or has an unexplained gap, collect the configured application log over the available command connection immediately. Preserve the serial-source failure alongside the alternate evidence. Read-only sources may reconnect; never blindly repeat an installation command after a disconnect.
 - Verify the actual deployed artifact/version or matching transaction receipt, running process identity and the requested behavior. Respect the project's existing rollback procedure if installation fails. Do not introduce raw flash writes or reset retained configuration to make a test pass.
+- Reproduce the requested trigger through its real input path. Apply the [acceptance evidence boundaries](references/project-adapters.md#acceptance-evidence) when interpreting host tests, simulated events, installer success or expected rollback. If acceptance is paused, stop task-owned observers and preserve the outstanding checks.
 
 ## Completion
 
