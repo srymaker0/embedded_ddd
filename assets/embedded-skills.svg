@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="440" viewBox="0 0 1200 440" role="img" aria-labelledby="title description">
+  <title id="title">embedded-skills — reusable skills for embedded development</title>
+  <desc id="description">Build and test with project tools. Deploy, Diagnostics and Debug form the DDD device workflow. Current skills support embedded Linux.</desc>
+  <defs>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#334155" stroke-opacity=".22"/>
+    </pattern>
+    <linearGradient id="background" x2="1" y2="1">
+      <stop stop-color="#101b2d"/>
+      <stop offset="1" stop-color="#0b1120"/>
+    </linearGradient>
+  </defs>
+  <rect x="1" y="1" width="1198" height="438" rx="24" fill="url(#background)" stroke="#28354a"/>
+  <rect x="24" y="24" width="1152" height="392" rx="12" fill="url(#grid)"/>
+
+  <g font-family="Arial, Helvetica, sans-serif">
+    <text x="48" y="58" fill="#9bacc6" font-size="13" font-weight="700" letter-spacing="3">EMBEDDED DEVELOPMENT / AGENT SKILLS</text>
+    <text x="44" y="145" fill="#f1f5f9" font-size="76" font-weight="700" letter-spacing="-3">embedded-<tspan fill="#67e8f9">skills</tspan></text>
+    <text x="48" y="190" fill="#c6d2e3" font-size="23">Your project. Your tools. Reusable engineering skills.</text>
+    <text x="48" y="220" fill="#93a7c2" font-size="17">From build artifacts to tests and device evidence.</text>
+
+    <g fill="none" stroke-width="1.5">
+      <rect x="962" y="76" width="108" height="108" rx="18" fill="#132536" stroke="#4eabbc"/>
+      <rect x="980" y="94" width="72" height="72" rx="8" stroke="#2c5369"/>
+      <path d="M982 76V56H930M1005 76V44M1028 76V44M1050 76V56H1102M982 184V204H930M1005 184V216M1028 184V216M1050 184V204H1102M962 108H934M962 130H914M962 152H934M1070 108H1098M1070 130H1118M1070 152H1098" stroke="#38566e"/>
+      <circle cx="930" cy="56" r="3" stroke="#67e8f9"/>
+      <circle cx="1102" cy="204" r="3" stroke="#bef264"/>
+    </g>
+    <text x="1016" y="137" text-anchor="middle" fill="#67e8f9" font-size="21" font-weight="700">Linux</text>
+
+    <text x="48" y="262" fill="#93a7c2" font-size="12" font-weight="700" letter-spacing="1.8">BUILD &amp; VERIFY</text>
+    <text x="496" y="262" fill="#93a7c2" font-size="12" font-weight="700" letter-spacing="1.8">DDD / DEVICE WORKFLOW</text>
+    <g fill="#111e31" stroke="#283b53">
+      <rect x="48" y="280" width="208" height="108" rx="12"/>
+      <rect x="272" y="280" width="208" height="108" rx="12"/>
+      <rect x="496" y="280" width="208" height="108" rx="12"/>
+      <rect x="720" y="280" width="208" height="108" rx="12"/>
+      <rect x="944" y="280" width="208" height="108" rx="12"/>
+    </g>
+    <g stroke-width="3">
+      <path d="M68 280H236" stroke="#93c5fd"/>
+      <path d="M292 280H460" stroke="#fcd34d"/>
+      <path d="M516 280H684" stroke="#bef264"/>
+      <path d="M740 280H908" stroke="#67e8f9"/>
+      <path d="M964 280H1132" stroke="#c4b5fd"/>
+    </g>
+    <g font-size="24" font-weight="700" fill="#f1f5f9">
+      <text x="68" y="318">Build</text>
+      <text x="292" y="318">Test</text>
+      <text x="516" y="318">Deploy</text>
+      <text x="740" y="318">Diagnostics</text>
+      <text x="964" y="318">Debug</text>
+    </g>
+    <g font-size="15" fill="#a9bad0">
+      <text x="68" y="348">Toolchains</text>
+      <text x="68" y="371">Packages &amp; provenance</text>
+      <text x="292" y="348">Regression checks</text>
+      <text x="292" y="371">Coverage &amp; acceptance</text>
+      <text x="516" y="348">Existing installers</text>
+      <text x="516" y="371">Artifacts &amp; recovery</text>
+      <text x="740" y="348">Logs &amp; process state</text>
+      <text x="740" y="371">Evidence &amp; causes</text>
+      <text x="964" y="348">Stacks &amp; breakpoints</text>
+      <text x="964" y="371">Live sessions &amp; cores</text>
+    </g>
+    <text x="48" y="419" fill="#8294b0" font-size="12" letter-spacing="1">LINUX TODAY · SKILLS THAT GROW WITH YOUR PROJECTS</text>
+  </g>
+</svg>

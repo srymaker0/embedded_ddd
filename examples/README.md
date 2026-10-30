@@ -1,5 +1,9 @@
 # A complete DDD loop on Linux
 
+This is the device-workflow example in embedded-skills. It executes fixed build,
+deployment and verification commands without calling a model; it is not an
+evaluation of how an assistant follows the build or test skill.
+
 This example provides its own application and installer. It needs no physical board
 and uses only temporary localhost SSH access. Run it as an ordinary development user
 on Linux, with Python 3.8+, GCC, GDB and OpenSSH clients/server available.

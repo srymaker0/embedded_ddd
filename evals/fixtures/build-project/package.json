@@ -1,0 +1,4 @@
+{
+  "product": "host-linux-sample",
+  "library": "vendor/libsample.so"
+}

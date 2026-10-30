@@ -3,5 +3,5 @@ include bin/embedded-ddd
 recursive-include assets *.svg
 recursive-include skills *.md *.yaml *.json
 recursive-include examples *.md *.py *.c
-recursive-include evals *.md *.py *.json
+recursive-include evals *.md *.py *.json *.c *.h
 recursive-include tests *.py *.c

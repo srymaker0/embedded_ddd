@@ -1,6 +1,6 @@
 ---
 name: embedded-linux-deploy
-description: Build, transfer and deploy an embedded Linux application or firmware through its project's existing installer, with automatic device log collection and post-deployment verification. Use for board deployment, upgrade validation, or following a developer's deployment.
+description: Transfer and deploy embedded Linux software through the project's existing installer, with device logs and post-deployment verification. Use for board deployment, upgrade validation, or following a developer's deployment.
 ---
 
 # Embedded Linux deployment
@@ -13,6 +13,11 @@ Complete the requested deployment and its agreed acceptance checks. Reuse confir
 2. Treat command access and file transfer as separate capabilities. Prefer the configured SSH route; Telnet and a free serial console are supported alternatives. File transfer can use SCP/SFTP, legacy SCP when explicitly selected, SSH streaming, or a project-owned HTTP/TFTP/NFS adapter. An SCP client alone does not establish interactive command access.
 3. Check target identity and available space, then identify the log sources and artifact/receipt checks. A process being present does not prove the requested feature works.
 4. When producing a deliverable, check the source checkout, build configuration and actual package contents. Follow [build and artifact provenance](references/project-adapters.md#build-and-artifact-provenance) when source or dependencies changed; a working component copied onto a board does not establish that the formal build includes it.
+
+Use `embedded-linux-build` when available for a required build or packaging step,
+and `embedded-linux-test` for selecting regression or acceptance checks. Carry their
+artifact and coverage evidence into deployment; use the project's existing tools
+directly when either skill is absent. A build-only task does not need deployment.
 
 When adapting an existing project or configuring an unusual transfer route, read [project adapters](references/project-adapters.md). Do not load adapter details for an already configured target.
 

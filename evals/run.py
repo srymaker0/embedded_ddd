@@ -19,7 +19,7 @@ from embedded_linux.profile import ToolError, load_profile
 
 REPOSITORY = Path(__file__).resolve().parents[1]
 CASES = ("first-connection", "missing-serial", "installer-disconnect", "authorized-gdb")
-SKILLS = ("embedded-linux-deploy", "embedded-linux-diagnostics", "embedded-linux-debug")
+SKILLS = tuple(sorted(path.parent.name for path in (REPOSITORY / "skills").glob("*/SKILL.md")))
 
 
 def command_evidence(events):
@@ -59,12 +59,14 @@ def trace_summary(events):
     return summary
 
 
-def run_codex(project, target, prompt, case_directory, timeout):
+def run_codex(project, target, prompt, case_directory, timeout, network=True):
     (case_directory / "prompt.txt").write_text(prompt)
     argv = ["codex", "--ask-for-approval", "never", "exec", "--json", "--ephemeral",
-            "--sandbox", "workspace-write", "-c", "sandbox_workspace_write.network_access=true",
-            "--skip-git-repo-check", "--cd", str(project), "--add-dir", str(target),
-            "--output-last-message", str(case_directory / "response.txt"), "-"]
+            "--sandbox", "workspace-write", "-c", "sandbox_workspace_write.network_access=" + str(network).lower(),
+            "--skip-git-repo-check", "--cd", str(project)]
+    if target is not None:
+        argv.extend(["--add-dir", str(target)])
+    argv.extend(["--output-last-message", str(case_directory / "response.txt"), "-"])
     started = time.monotonic()
     timed_out = False
     with (case_directory / "events.jsonl").open("w") as events, (case_directory / "stderr.txt").open("w") as errors:

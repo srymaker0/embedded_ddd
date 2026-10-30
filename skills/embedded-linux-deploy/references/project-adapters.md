@@ -21,7 +21,7 @@ Modern `scp` normally uses SFTP, whereas older clients default to the legacy pro
 
 HTTP upload serves only one selected file at a random URL for the duration of the transfer. It requires the board to reach the host's selected interface. The helper verifies SHA256 before renaming its temporary upload. This transfers a file; installing an application/firmware still belongs to the project adapter. For Telnet-only boards, use a trusted lab network. For large core dumps, choose an existing project transfer path or SSH file transfer rather than sending a binary over a text console.
 
-Look at the repository's `examples/*.json` for minimal SSH, Telnet and direct serial profiles. Replace placeholders in a private copy. Addresses, absolute development paths, credentials and raw device evidence do not belong in the public skill repository.
+When `embedded-linux-diagnostics` is installed, its `assets/profiles/` directory provides minimal SSH, Telnet and direct serial profiles. Otherwise use the project's existing connection configuration. Replace placeholders in a private copy. Addresses, absolute development paths, credentials and raw device evidence do not belong in the public skill repository.
 
 ## Build and artifact provenance
 

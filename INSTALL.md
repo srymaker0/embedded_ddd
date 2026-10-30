@@ -1,13 +1,13 @@
-# Install embedded-ddd
+# Install embedded-skills
 
 Install from <https://github.com/srymaker0/embedded_ddd> into the application project where you want to use the skills.
 
 ## For AI assistants
 
-1. Work from the application project directory. Use the project installation command below to download the three skills from GitHub into `.agents/skills/`. Preserve unrelated skills and any local edits to an existing installation.
+1. Work from the application project directory. Use the project installation command below to download the five skills from GitHub into `.agents/skills/`, or only the subset requested by the user. Preserve unrelated skills and any local edits to an existing installation.
 2. Verify that each skill has a readable `SKILL.md` in its own directory. The installed directories must contain the files themselves and remain usable after the temporary download is removed.
-3. Finish the default installation after copying the three skills. Use the project's existing connection, deployment and debugging tools. Install the optional helper only when the user requests it or a specific device task needs capabilities that the existing tools do not provide. Reuse a suitable installed helper environment before creating another one.
-4. Check skill discovery and report the three installed paths. If a helper was separately requested or needed, run its `--help` and report its location as well. Start a new session if the client has not refreshed its skills.
+3. Finish the default installation after copying the selected skills. Use the project's existing build, test and device tools. Install the optional helper only when the user requests it or a specific device task needs capabilities that the existing tools do not provide. Reuse a suitable installed helper environment before creating another one.
+4. Check skill discovery and report the installed paths. If a helper was separately requested or needed, run its `--help` and report its location as well. Start a new session if the client has not refreshed its skills.
 
 Installation does not require a device connection or credentials. Configure a target when the user requests a device task. The diagnostics skill ships a [first-connection guide](skills/embedded-linux-diagnostics/references/first-connection.md) and SSH, Telnet and serial templates; no source checkout is needed to use them.
 
@@ -17,7 +17,8 @@ With Node.js, npm and Git available, run this command from your application proj
 
 ```sh
 npx --yes skills add srymaker0/embedded_ddd --agent codex \
-  --skill embedded-linux-deploy embedded-linux-diagnostics embedded-linux-debug --copy --yes
+  --skill embedded-linux-build embedded-linux-test \
+  embedded-linux-deploy embedded-linux-diagnostics embedded-linux-debug --copy --yes
 ```
 
 The installer downloads the skills and places their files directly in:
@@ -26,6 +27,14 @@ The installer downloads the skills and places their files directly in:
 your-project/
 └── .agents/
     └── skills/
+        ├── embedded-linux-build/
+        │   ├── SKILL.md
+        │   ├── agents/
+        │   └── references/
+        ├── embedded-linux-test/
+        │   ├── SKILL.md
+        │   ├── agents/
+        │   └── references/
         ├── embedded-linux-deploy/
         │   ├── SKILL.md
         │   ├── agents/
@@ -41,9 +50,9 @@ your-project/
             └── references/
 ```
 
-These are ordinary directories. Default installation adds only these three skills; it does not create a Python environment. Codex discovers them through its project skill directory. A permanent repository checkout and skill symlinks are unnecessary.
+These are ordinary directories. Default installation adds only these five skills; it does not create a Python environment. To install a subset, keep only the desired names after `--skill`. Codex discovers them through its project skill directory. A permanent repository checkout and skill symlinks are unnecessary.
 
-The installer records the source of each skill in `skills-lock.json` at the project root. Keep that file with the skills when sharing the installation with a team. For a private local installation, use the application's local Git exclude file to ignore these three directories, the optional `.agents/skills/.embedded-ddd/` environment and `skills-lock.json` as needed. Preserve existing ignore rules.
+The installer records the source of each skill in `skills-lock.json` at the project root. Keep that file with the skills when sharing the installation with a team. For a private local installation, use the application's local Git exclude file to ignore the installed skill directories, the optional `.agents/skills/.embedded-ddd/` environment and `skills-lock.json` as needed. Preserve existing ignore rules.
 
 Check discovery with:
 
@@ -51,11 +60,11 @@ Check discovery with:
 npx --yes skills list --agent codex
 ```
 
-If Node.js is unavailable, use Codex's skill installer with this repository's `master` branch, the three `skills/embedded-linux-*` paths and an explicit destination of `<project>/.agents/skills`. It copies the same skill directories. Track updates manually when using that route.
+If Node.js is unavailable, use Codex's skill installer with this repository's `master` branch, the desired paths under `skills/` and an explicit destination of `<project>/.agents/skills`. It copies the same skill directories. Track updates manually when using that route.
 
 ## Command-line tool
 
-The skills work with existing project tools. Set up the shared `embedded-ddd` helper only when a device task needs it or you choose to use it. It supports Linux, including WSL, with Python 3.8 or later.
+The skills work with existing project tools. The `embedded-ddd` Python package and command provide the collection's optional DDD device helper; build and test skills do not require it. Set it up only when a device task needs it or you choose to use it. It supports Linux, including WSL, with Python 3.8 or later.
 
 If a suitable environment already provides `embedded-ddd`, use that command. Otherwise, the following commands create an optional environment inside the project's skill directory. Run them from the application project:
 
@@ -67,7 +76,7 @@ python3 -m venv .agents/skills/.embedded-ddd
 .agents/skills/.embedded-ddd/bin/embedded-ddd --help
 ```
 
-This installs the Python package and its dependencies inside `.agents/skills/.embedded-ddd/`. The three skills share this environment; no persistent source checkout is needed. Use `.agents/skills/.embedded-ddd/bin/embedded-ddd` from the project directory, or `../.embedded-ddd/bin/embedded-ddd` relative to an installed skill directory. Adding the tool to `PATH` is optional.
+This installs the Python package and its dependencies inside `.agents/skills/.embedded-ddd/`. The three device skills share this environment; no persistent source checkout is needed. Use `.agents/skills/.embedded-ddd/bin/embedded-ddd` from the project directory, or `../.embedded-ddd/bin/embedded-ddd` relative to an installed skill directory. Adding the tool to `PATH` is optional.
 
 SSH and file transfers use system OpenSSH clients. Telnet needs a system `telnet` client. Direct serial uses PySerial and Pexpect; reading an existing terminal log does not require owning the serial port. Install a matching GDB when a debugging task needs it.
 
@@ -77,10 +86,11 @@ If `venv` is unavailable, install your distribution's Python venv package and re
 
 ## Update
 
-Preserve any local skill edits before updating. From the application project, update these three skills:
+Preserve any local skill edits before updating. If upgrading from the three device skills, first run the installation command above to add build and test. From the application project, update the skills you have installed:
 
 ```sh
-npx --yes skills update embedded-linux-deploy embedded-linux-diagnostics embedded-linux-debug --project --yes
+npx --yes skills update embedded-linux-build embedded-linux-test \
+  embedded-linux-deploy embedded-linux-diagnostics embedded-linux-debug --project --yes
 ```
 
 If you installed the helper, update its package separately:
@@ -98,7 +108,8 @@ Each project owns its installed copies and updates independently.
 From the application project:
 
 ```sh
-npx --yes skills remove embedded-linux-deploy embedded-linux-diagnostics embedded-linux-debug --agent codex --yes
+npx --yes skills remove embedded-linux-build embedded-linux-test \
+  embedded-linux-deploy embedded-linux-diagnostics embedded-linux-debug --agent codex --yes
 ```
 
-If you installed the optional helper, remove `.agents/skills/.embedded-ddd/` after confirming it is this installation's virtual environment. For a manual skill installation, remove the three skill directories directly. Preserve unrelated skills, lockfile entries and Git exclude rules.
+For a partial installation, include only the installed skill names. If you installed the optional helper, remove `.agents/skills/.embedded-ddd/` after confirming it is this installation's virtual environment. For a manual skill installation, remove the installed skill directories directly. Preserve unrelated skills, lockfile entries and Git exclude rules.

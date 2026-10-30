@@ -1,0 +1,4 @@
+interface:
+  display_name: "Embedded Linux Test"
+  short_description: "Run regression tests and verify acceptance coverage"
+  default_prompt: "Use $embedded-linux-test to verify this change with the appropriate existing tests and identify pending device acceptance."

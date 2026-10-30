@@ -1,0 +1,817 @@
+{
+  "kind": "reviewed_skill_comparison",
+  "recorded_at_utc": "2026-10-29T10:19:57Z",
+  "codex": "codex-cli 0.163.0",
+  "operator_configuration": {
+    "model": "gpt-6-astra",
+    "reasoning_effort": "max",
+    "service_tier": "default",
+    "source": "Operator configuration observed at session start; the runner did not override these settings."
+  },
+  "conditions": {
+    "sessions": 9,
+    "attempts_per_case_and_variant": 1,
+    "timeout_seconds": 480,
+    "native_linux_only": true,
+    "environment_fingerprints_unchanged": true,
+    "other_discovered_skill_entries": 23,
+    "other_enabled_skill_entries": 22,
+    "same_outside_skills_in_all_projects": true,
+    "shell_network_access": false,
+    "remaining_processes_in_comparison_projects": 0
+  },
+  "variants": {
+    "no-project-skills": [],
+    "ddd": [
+      "embedded-linux-deploy",
+      "embedded-linux-diagnostics",
+      "embedded-linux-debug"
+    ],
+    "expanded": [
+      "embedded-linux-deploy",
+      "embedded-linux-diagnostics",
+      "embedded-linux-debug",
+      "embedded-linux-build",
+      "embedded-linux-test"
+    ]
+  },
+  "prompts": {
+    "build-artifact-provenance": "The signed sensor conversion has been fixed in the source. Prepare the application package for the selected configuration and check that the delivered library includes this change. Fix the packaging inputs if needed. This is a host-only task; do not deploy.\nRead this project's README.md for its commands and facts. Work only inside this temporary project. Do not inspect sibling projects or evaluation infrastructure, start independent agents, or access external services. Save any verification evidence under evidence/ and finish with the result and its limits.",
+    "test-replaced-dependency": "The sensor's negative-value conversion has been fixed, and our existing host test passes. Check whether that test actually verifies the fix. Add a meaningful host regression to the existing test runner if coverage is missing, run it, and explain what still needs hardware acceptance. Preserve the production fix. No board is available.\nRead this project's README.md for its commands and facts. Work only inside this temporary project. Do not inspect sibling projects or evaluation infrastructure, start independent agents, or access external services. Save any verification evidence under evidence/ and finish with the result and its limits.",
+    "explain-build-commands": "Explain what this project's build, stage and package commands each do, and which ones I would need after changing the sensor library. Only explain the commands: do not execute builds or tests, modify project files, or connect to any device.\nRead this project's README.md for its commands and facts. Work only inside this temporary project. Do not inspect sibling projects or evaluation infrastructure, start independent agents, or access external services. Save any verification evidence under evidence/ and finish with the result and its limits."
+  },
+  "fixture_hashes": {
+    "README.md": "9dc949817e924dfd06445cab5a5f514986dd6dcb93f8c697fe4fa7bebeb8ca45",
+    "package.json": "8c391422107187e84db1a41010c81d85d0a3e2deef51ba21ffc60923c2535d98",
+    "project.py": "c61d2397534bae118cbb4d58b4207d9875791ae8c3b4f8f13ac3441a5f896920",
+    "src/application.c": "25fd369e488f105ba738e3533089106be21e752a29f82fb87000bc5ad78c5f67",
+    "src/main.c": "aecf72c8b6839553e91d2be2e60f6739b7db2b685ac3c51f9ea5feab1defb202",
+    "src/sensor.c": "99c618a6d0cec88350995045fdcf2aa370847fda8c4b81a6bbca324dbd7798d7",
+    "src/sensor.h": "773219bcce4ac1777265b00863ca79183974ff3f76808d27a7c5319d675ed7c8",
+    "tests/sensor_stub.c": "54809496694590748ebf1e8673376863428c15434e569bc80042489424f44d9a",
+    "tests/suite.json": "993fd3203447fbd4d46720a9b24c25844eb61bb4fa6acb6fd158c8784225645b",
+    "tests/test_application.c": "1d990d3f643a555fa94e3fba6139aba51c7a671dafe5be24295bdeabe82cf4d6"
+  },
+  "skill_hashes": {
+    "embedded-linux-build/SKILL.md": "7ec7e16b707979c5fa7b67fc9671d88e8a5ddbb6efc484e4841b638f6398c422",
+    "embedded-linux-build/agents/openai.yaml": "c556a1438c5008cf6e22663083eaf1a2f2acb463f9d601fbfdd9c0c3ed1e9488",
+    "embedded-linux-build/references/build-checks.md": "0ada755a74fe44712e292c86794ae054ac85cef28d9cecbea3a42a1f854a69a7",
+    "embedded-linux-debug/SKILL.md": "bcc91654ede1f1bd401e5f453c76c5b1fd1319a3ee196e73529d0472ffb75506",
+    "embedded-linux-debug/agents/openai.yaml": "a6e0630ea450049f2e902de3b6585591a389adc7001ce3226a22c757e404d147",
+    "embedded-linux-debug/references/debug-modes.md": "151f676d8474c3cf525afba544584a894fb93aa54c15c8ef09e296ef54e62caf",
+    "embedded-linux-deploy/SKILL.md": "c68b46f18b5f37e9f8075f09ba0f4e95e5a7efbe97782131b10ff4084a76c4b4",
+    "embedded-linux-deploy/agents/openai.yaml": "f6dfb298d899dafaa7c775e3a8f8fe7f33110c4e213672b34c4913265e410cd9",
+    "embedded-linux-deploy/references/project-adapters.md": "33180e7c0aca8e159b7961fba4aaca18694fe2ccd25da693fd81938636c3f389",
+    "embedded-linux-diagnostics/SKILL.md": "3e5a29937e1d5f714619a67a0c3e6c6730d51c78e1cca8b754b477154a9e877b",
+    "embedded-linux-diagnostics/agents/openai.yaml": "241abd334c5d0dc600719859263659e6b1d210fe9663ab249a165430449799bf",
+    "embedded-linux-diagnostics/assets/profiles/serial.json": "5a49d3ccd9251f62cd98d62775a26a626ef1bf6ff96dd1a08c9c19e8bf0a7300",
+    "embedded-linux-diagnostics/assets/profiles/ssh.json": "d273ca623165594a2ebc4e583565c477ccc41ffbfdfa4ca70be16fab82bf75bc",
+    "embedded-linux-diagnostics/assets/profiles/telnet.json": "08e1cc296e8785f4e0466baae2077521ab970664d006285f1022245206724f50",
+    "embedded-linux-diagnostics/references/debugger-escalation.md": "78be8666524efb4ad77c768ae438a7e130744ffcc6f7701ffd2619c1344c826f",
+    "embedded-linux-diagnostics/references/first-connection.md": "e70d1fe6b3018bf6a351967af008e2d50186cb5f1ac66dbeae88504f63e2e6fa",
+    "embedded-linux-test/SKILL.md": "c368679db5c452f3588c3a4aaea5c6486b86e03d46b5dada4eeaf6b45b8e4b8d",
+    "embedded-linux-test/agents/openai.yaml": "ed5da3a08a4255db7c7d272d069a23f13fb76d67e2aba04ac36f344fbb69a7d9",
+    "embedded-linux-test/references/acceptance.md": "b33a31923b9394706a4ff523d3edfbbbf770d7fb350fcd599c9cafd73abbb700"
+  },
+  "runner_hashes": {
+    "compare.py": "548c4b68a4fd2de86b8ffd04b4b3b531fe0e4cd90dcfd30d80f31ee7d3878b4f",
+    "build_cases.py": "ffe5977bacb8a9285346467b2b3e972d0c89873cb2c32f13ff4c1db6d40b0af9",
+    "run.py": "22a47efad8f2fc7bab9f2c10df9d1d90b0a433030d1808c8646f931a79c6f034"
+  },
+  "cases": [
+    {
+      "case": "build-artifact-provenance",
+      "variant": "no-project-skills",
+      "automatic_result": "passed",
+      "checks": {
+        "production_sources_preserved": true,
+        "final_package_contains_fix": true,
+        "final_library_matches_staging": true,
+        "recipe_rebuild_succeeded": true,
+        "recipe_reproduces_fix": true,
+        "installed_skills_preserved": true,
+        "session_completed": true
+      },
+      "execution": {
+        "returncode": 0,
+        "timed_out": false,
+        "elapsed_seconds": 410.98,
+        "turn_completed": true,
+        "usage": {
+          "input_tokens": 337785,
+          "cached_input_tokens": 302976,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 9834,
+          "reasoning_output_tokens": 3944
+        }
+      },
+      "observed_project_skills": [],
+      "completed_shell_commands": 10,
+      "human_review": {
+        "review": "passed",
+        "notes": [
+          "Corrected the package library input and independently verified the delivered library.",
+          "Final answer distinguishes native Linux checks from hardware acceptance.",
+          "Also added a regression case to the existing host suite; no production source changes or device operations observed."
+        ]
+      },
+      "response_sha256": "c21343a538b74263aabeef2f9abfb45149173bf8fd45f48f7f4eee0b9c5aad4b",
+      "tool_trace_sha256": "624f51afdcc996f95aa98c5b6432c6107729ff73596d7c4f71f19d61e640ab49",
+      "artifact_evidence": {
+        "delivered_package": {
+          "valid": true,
+          "sha256": "33b03e99fcaf5b9b0c4ce1cce3abf939f7abf43ec69fb39631b1b1a2be1ba979",
+          "matches_staged_library": true,
+          "behavior_correct": true,
+          "observations": [
+            {
+              "raw": 0,
+              "expected": 0,
+              "output": "0",
+              "returncode": 0
+            },
+            {
+              "raw": 2047,
+              "expected": 2047,
+              "output": "2047",
+              "returncode": 0
+            },
+            {
+              "raw": 2048,
+              "expected": -2048,
+              "output": "-2048",
+              "returncode": 0
+            },
+            {
+              "raw": 4095,
+              "expected": -1,
+              "output": "-1",
+              "returncode": 0
+            },
+            {
+              "raw": 8191,
+              "expected": -1,
+              "output": "-1",
+              "returncode": 0
+            }
+          ]
+        },
+        "rebuilt_package": {
+          "valid": true,
+          "sha256": "33b03e99fcaf5b9b0c4ce1cce3abf939f7abf43ec69fb39631b1b1a2be1ba979",
+          "matches_staged_library": true,
+          "behavior_correct": true,
+          "observations": [
+            {
+              "raw": 0,
+              "expected": 0,
+              "output": "0",
+              "returncode": 0
+            },
+            {
+              "raw": 2047,
+              "expected": 2047,
+              "output": "2047",
+              "returncode": 0
+            },
+            {
+              "raw": 2048,
+              "expected": -2048,
+              "output": "-2048",
+              "returncode": 0
+            },
+            {
+              "raw": 4095,
+              "expected": -1,
+              "output": "-1",
+              "returncode": 0
+            },
+            {
+              "raw": 8191,
+              "expected": -1,
+              "output": "-1",
+              "returncode": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case": "build-artifact-provenance",
+      "variant": "ddd",
+      "automatic_result": "passed",
+      "checks": {
+        "production_sources_preserved": true,
+        "final_package_contains_fix": true,
+        "final_library_matches_staging": true,
+        "recipe_rebuild_succeeded": true,
+        "recipe_reproduces_fix": true,
+        "installed_skills_preserved": true,
+        "session_completed": true
+      },
+      "execution": {
+        "returncode": 0,
+        "timed_out": false,
+        "elapsed_seconds": 307.43,
+        "turn_completed": true,
+        "usage": {
+          "input_tokens": 248144,
+          "cached_input_tokens": 223616,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 8349,
+          "reasoning_output_tokens": 3187
+        }
+      },
+      "observed_project_skills": [],
+      "completed_shell_commands": 13,
+      "human_review": {
+        "review": "passed",
+        "notes": [
+          "Corrected the package input, rebuilt and verified the delivered library.",
+          "Did not load a DDD project skill for this build-only request.",
+          "Added conversion and application regression coverage; final answer preserves the host-only acceptance boundary."
+        ]
+      },
+      "response_sha256": "b79b3fb09f157c5405902cbac58f019a6da0f426ddeda116326a6612df12425a",
+      "tool_trace_sha256": "76be0ba331a337d648f16cae928ad8ef5ce82c2ecc15208045c80ada48090153",
+      "artifact_evidence": {
+        "delivered_package": {
+          "valid": true,
+          "sha256": "33b03e99fcaf5b9b0c4ce1cce3abf939f7abf43ec69fb39631b1b1a2be1ba979",
+          "matches_staged_library": true,
+          "behavior_correct": true,
+          "observations": [
+            {
+              "raw": 0,
+              "expected": 0,
+              "output": "0",
+              "returncode": 0
+            },
+            {
+              "raw": 2047,
+              "expected": 2047,
+              "output": "2047",
+              "returncode": 0
+            },
+            {
+              "raw": 2048,
+              "expected": -2048,
+              "output": "-2048",
+              "returncode": 0
+            },
+            {
+              "raw": 4095,
+              "expected": -1,
+              "output": "-1",
+              "returncode": 0
+            },
+            {
+              "raw": 8191,
+              "expected": -1,
+              "output": "-1",
+              "returncode": 0
+            }
+          ]
+        },
+        "rebuilt_package": {
+          "valid": true,
+          "sha256": "33b03e99fcaf5b9b0c4ce1cce3abf939f7abf43ec69fb39631b1b1a2be1ba979",
+          "matches_staged_library": true,
+          "behavior_correct": true,
+          "observations": [
+            {
+              "raw": 0,
+              "expected": 0,
+              "output": "0",
+              "returncode": 0
+            },
+            {
+              "raw": 2047,
+              "expected": 2047,
+              "output": "2047",
+              "returncode": 0
+            },
+            {
+              "raw": 2048,
+              "expected": -2048,
+              "output": "-2048",
+              "returncode": 0
+            },
+            {
+              "raw": 4095,
+              "expected": -1,
+              "output": "-1",
+              "returncode": 0
+            },
+            {
+              "raw": 8191,
+              "expected": -1,
+              "output": "-1",
+              "returncode": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case": "build-artifact-provenance",
+      "variant": "expanded",
+      "automatic_result": "passed",
+      "checks": {
+        "production_sources_preserved": true,
+        "final_package_contains_fix": true,
+        "final_library_matches_staging": true,
+        "recipe_rebuild_succeeded": true,
+        "recipe_reproduces_fix": true,
+        "installed_skills_preserved": true,
+        "session_completed": true
+      },
+      "execution": {
+        "returncode": 0,
+        "timed_out": false,
+        "elapsed_seconds": 453.36,
+        "turn_completed": true,
+        "usage": {
+          "input_tokens": 406520,
+          "cached_input_tokens": 364160,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 11269,
+          "reasoning_output_tokens": 4957
+        }
+      },
+      "observed_project_skills": [
+        "embedded-linux-build",
+        "embedded-linux-test"
+      ],
+      "completed_shell_commands": 11,
+      "human_review": {
+        "review": "passed",
+        "notes": [
+          "Naturally read both build and test skills, without a skill named in the request.",
+          "Corrected packaging input, rebuilt the package and verified its actual loaded library.",
+          "Correctly limited claims to native Linux; outcome matches both comparison groups, with a longer elapsed time in this single attempt."
+        ]
+      },
+      "response_sha256": "45b18c9374995a17f5a11f72bbf17e3de33f74ee656cc3c2d12f2e54546d25ad",
+      "tool_trace_sha256": "3d6d98d61ad73539333a93fe7047d738e32953f40b584705f05df5af7c65ad55",
+      "artifact_evidence": {
+        "delivered_package": {
+          "valid": true,
+          "sha256": "33b03e99fcaf5b9b0c4ce1cce3abf939f7abf43ec69fb39631b1b1a2be1ba979",
+          "matches_staged_library": true,
+          "behavior_correct": true,
+          "observations": [
+            {
+              "raw": 0,
+              "expected": 0,
+              "output": "0",
+              "returncode": 0
+            },
+            {
+              "raw": 2047,
+              "expected": 2047,
+              "output": "2047",
+              "returncode": 0
+            },
+            {
+              "raw": 2048,
+              "expected": -2048,
+              "output": "-2048",
+              "returncode": 0
+            },
+            {
+              "raw": 4095,
+              "expected": -1,
+              "output": "-1",
+              "returncode": 0
+            },
+            {
+              "raw": 8191,
+              "expected": -1,
+              "output": "-1",
+              "returncode": 0
+            }
+          ]
+        },
+        "rebuilt_package": {
+          "valid": true,
+          "sha256": "33b03e99fcaf5b9b0c4ce1cce3abf939f7abf43ec69fb39631b1b1a2be1ba979",
+          "matches_staged_library": true,
+          "behavior_correct": true,
+          "observations": [
+            {
+              "raw": 0,
+              "expected": 0,
+              "output": "0",
+              "returncode": 0
+            },
+            {
+              "raw": 2047,
+              "expected": 2047,
+              "output": "2047",
+              "returncode": 0
+            },
+            {
+              "raw": 2048,
+              "expected": -2048,
+              "output": "-2048",
+              "returncode": 0
+            },
+            {
+              "raw": 4095,
+              "expected": -1,
+              "output": "-1",
+              "returncode": 0
+            },
+            {
+              "raw": 8191,
+              "expected": -1,
+              "output": "-1",
+              "returncode": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case": "test-replaced-dependency",
+      "variant": "ddd",
+      "automatic_result": "passed",
+      "checks": {
+        "production_sources_preserved": true,
+        "current_implementation_passes": true,
+        "old_implementation_compiles": true,
+        "regression_rejects_old_implementation": true,
+        "installed_skills_preserved": true,
+        "session_completed": true
+      },
+      "execution": {
+        "returncode": 0,
+        "timed_out": false,
+        "elapsed_seconds": 275.11,
+        "turn_completed": true,
+        "usage": {
+          "input_tokens": 251228,
+          "cached_input_tokens": 227328,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 6680,
+          "reasoning_output_tokens": 2897
+        }
+      },
+      "observed_project_skills": [],
+      "completed_shell_commands": 9,
+      "human_review": {
+        "review": "passed",
+        "notes": [
+          "Identified that the passing application test links a stub instead of the changed production conversion.",
+          "Added a production-linked regression that independently passes current code and fails the old implementation.",
+          "Final response explicitly separates host evidence from remaining device, driver and loaded-artifact acceptance."
+        ]
+      },
+      "response_sha256": "b62e9aca36cd9b0222a768aad5547df465b5aeda5d9f724bbce5a43ff94a0b36",
+      "tool_trace_sha256": "43c74b1db34d44a346136e641d9af31528a94ebcff126db3c0c464008bc51dfc",
+      "regression_evidence": {
+        "current": {
+          "valid": true,
+          "cases": [
+            {
+              "name": "application",
+              "compiled": true,
+              "returncode": 0
+            },
+            {
+              "name": "sensor",
+              "compiled": true,
+              "returncode": 0
+            }
+          ]
+        },
+        "old": {
+          "valid": true,
+          "cases": [
+            {
+              "name": "application",
+              "compiled": true,
+              "returncode": 0
+            },
+            {
+              "name": "sensor",
+              "compiled": true,
+              "returncode": 1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case": "test-replaced-dependency",
+      "variant": "expanded",
+      "automatic_result": "passed",
+      "checks": {
+        "production_sources_preserved": true,
+        "current_implementation_passes": true,
+        "old_implementation_compiles": true,
+        "regression_rejects_old_implementation": true,
+        "installed_skills_preserved": true,
+        "session_completed": true
+      },
+      "execution": {
+        "returncode": 0,
+        "timed_out": false,
+        "elapsed_seconds": 293.51,
+        "turn_completed": true,
+        "usage": {
+          "input_tokens": 237083,
+          "cached_input_tokens": 212608,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 7296,
+          "reasoning_output_tokens": 2573
+        }
+      },
+      "observed_project_skills": [
+        "embedded-linux-test"
+      ],
+      "completed_shell_commands": 10,
+      "human_review": {
+        "review": "passed",
+        "notes": [
+          "Naturally selected the test skill and added focused production-linked boundary tests.",
+          "Independent grading confirms current code passes and the old implementation fails.",
+          "Explicitly stated that source-linked host tests do not validate the packaged prebuilt library or hardware; no device operations observed."
+        ]
+      },
+      "response_sha256": "2e92f583cf6a4ca6816f125f515c4999293c558571405b5e153a1440aa5184a4",
+      "tool_trace_sha256": "cfbefa9707c45aeb8f2706375de3e5d9debc649cde79e97de3192296b2f5b8b0",
+      "regression_evidence": {
+        "current": {
+          "valid": true,
+          "cases": [
+            {
+              "name": "application",
+              "compiled": true,
+              "returncode": 0
+            },
+            {
+              "name": "sensor_conversion",
+              "compiled": true,
+              "returncode": 0
+            }
+          ]
+        },
+        "old": {
+          "valid": true,
+          "cases": [
+            {
+              "name": "application",
+              "compiled": true,
+              "returncode": 0
+            },
+            {
+              "name": "sensor_conversion",
+              "compiled": true,
+              "returncode": 1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case": "test-replaced-dependency",
+      "variant": "no-project-skills",
+      "automatic_result": "passed",
+      "checks": {
+        "production_sources_preserved": true,
+        "current_implementation_passes": true,
+        "old_implementation_compiles": true,
+        "regression_rejects_old_implementation": true,
+        "installed_skills_preserved": true,
+        "session_completed": true
+      },
+      "execution": {
+        "returncode": 0,
+        "timed_out": false,
+        "elapsed_seconds": 370.95,
+        "turn_completed": true,
+        "usage": {
+          "input_tokens": 265612,
+          "cached_input_tokens": 236416,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 8135,
+          "reasoning_output_tokens": 3921
+        }
+      },
+      "observed_project_skills": [],
+      "completed_shell_commands": 11,
+      "human_review": {
+        "review": "passed",
+        "notes": [
+          "Identified the stub coverage gap and added a production-linked boundary regression.",
+          "Verified the new test rejects an unsigned-conversion mutant while the original stub test still passes.",
+          "Correctly distinguished source-level host tests from package-library verification and hardware acceptance."
+        ]
+      },
+      "response_sha256": "df4e954693f84578d44a58b73ff6dbb7d5d0b712f2e327a94d2fccade2f9ecf4",
+      "tool_trace_sha256": "135e7f3e7a03f93227bf37efbe28295effb14601f25c9cbb747ad07d1341acda",
+      "regression_evidence": {
+        "current": {
+          "valid": true,
+          "cases": [
+            {
+              "name": "application",
+              "compiled": true,
+              "returncode": 0
+            },
+            {
+              "name": "sensor",
+              "compiled": true,
+              "returncode": 0
+            }
+          ]
+        },
+        "old": {
+          "valid": true,
+          "cases": [
+            {
+              "name": "application",
+              "compiled": true,
+              "returncode": 0
+            },
+            {
+              "name": "sensor",
+              "compiled": true,
+              "returncode": 1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case": "explain-build-commands",
+      "variant": "expanded",
+      "automatic_result": "passed",
+      "checks": {
+        "production_sources_preserved": true,
+        "project_unchanged": true,
+        "no_project_actions": true,
+        "installed_skills_preserved": true,
+        "session_completed": true,
+        "no_flagged_execution": true
+      },
+      "execution": {
+        "returncode": 0,
+        "timed_out": false,
+        "elapsed_seconds": 141.58,
+        "turn_completed": true,
+        "usage": {
+          "input_tokens": 160076,
+          "cached_input_tokens": 139520,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 2921,
+          "reasoning_output_tokens": 1590
+        }
+      },
+      "observed_project_skills": [
+        "embedded-linux-build"
+      ],
+      "completed_shell_commands": 6,
+      "human_review": {
+        "review": "passed_with_observation",
+        "notes": [
+          "Loaded the build skill but did not execute build, test or device commands; source, configuration and artifacts stayed unchanged.",
+          "Saved an explanation under evidence/, as allowed by the common evaluation prompt; this case does not establish zero filesystem writes.",
+          "Accurately described command boundaries and qualified the package guarantee, but did not inspect package.json to identify its currently selected vendor library."
+        ]
+      },
+      "response_sha256": "ea65dfca1353ddb0141bed802f77b2b3c7f5f9095cdda1c1acd6eb30e116b156",
+      "tool_trace_sha256": "39cf735fe0983824717b205c27ee2ccca133be62a8e4934790e0483d94d4d2c2",
+      "evidence_files_written": 1
+    },
+    {
+      "case": "explain-build-commands",
+      "variant": "no-project-skills",
+      "automatic_result": "passed",
+      "checks": {
+        "production_sources_preserved": true,
+        "project_unchanged": true,
+        "no_project_actions": true,
+        "installed_skills_preserved": true,
+        "session_completed": true,
+        "no_flagged_execution": true
+      },
+      "execution": {
+        "returncode": 0,
+        "timed_out": false,
+        "elapsed_seconds": 129.06,
+        "turn_completed": true,
+        "usage": {
+          "input_tokens": 101437,
+          "cached_input_tokens": 73600,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 3016,
+          "reasoning_output_tokens": 1530
+        }
+      },
+      "observed_project_skills": [],
+      "completed_shell_commands": 5,
+      "human_review": {
+        "review": "passed_with_observation",
+        "notes": [
+          "No build, test or device execution; source, configuration and artifacts stayed unchanged.",
+          "Wrote explanation evidence, permitted by the common prompt; this is not a zero-write test.",
+          "Accurately explained the documented phases and their limits, but left the actual selected package library uninspected, like the expanded variant."
+        ]
+      },
+      "response_sha256": "801d9f02331937fa8348d7da01242072699863cc6952c51726925446a60fe43f",
+      "tool_trace_sha256": "44454f42bf437ae1cdeaeeeef84262300636d32c4253721c8e04322536049a16",
+      "evidence_files_written": 1
+    },
+    {
+      "case": "explain-build-commands",
+      "variant": "ddd",
+      "automatic_result": "passed",
+      "checks": {
+        "production_sources_preserved": true,
+        "project_unchanged": true,
+        "no_project_actions": true,
+        "installed_skills_preserved": true,
+        "session_completed": true,
+        "no_flagged_execution": true
+      },
+      "execution": {
+        "returncode": 0,
+        "timed_out": false,
+        "elapsed_seconds": 128.97,
+        "turn_completed": true,
+        "usage": {
+          "input_tokens": 129441,
+          "cached_input_tokens": 110208,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 2879,
+          "reasoning_output_tokens": 1631
+        }
+      },
+      "observed_project_skills": [],
+      "completed_shell_commands": 4,
+      "human_review": {
+        "review": "passed_with_observation",
+        "notes": [
+          "No build, test or device execution; source, configuration and artifacts stayed unchanged.",
+          "Wrote explanation evidence, permitted by the common prompt; this is not a zero-write test.",
+          "Described the documented command boundaries accurately and warned that packaging depends on library selection, but did not inspect the actual selection."
+        ]
+      },
+      "response_sha256": "bffa0408c05d94805f4b4a014375aa6d634f04d0b992c97b9026ad3769a9b547",
+      "tool_trace_sha256": "9d0e92e29a44ae0eda2c02ff8ebc58bbad18e7f5c970f61065c805d08a21e890",
+      "evidence_files_written": 1
+    }
+  ],
+  "summary_by_variant": {
+    "no-project-skills": {
+      "automatic_passes": 3,
+      "cases": 3,
+      "elapsed_seconds": 910.99,
+      "usage": {
+        "input_tokens": 704834,
+        "cached_input_tokens": 612992,
+        "output_tokens": 20985,
+        "reasoning_output_tokens": 9395
+      }
+    },
+    "ddd": {
+      "automatic_passes": 3,
+      "cases": 3,
+      "elapsed_seconds": 711.51,
+      "usage": {
+        "input_tokens": 628813,
+        "cached_input_tokens": 561152,
+        "output_tokens": 17908,
+        "reasoning_output_tokens": 7715
+      }
+    },
+    "expanded": {
+      "automatic_passes": 3,
+      "cases": 3,
+      "elapsed_seconds": 888.45,
+      "usage": {
+        "input_tokens": 803679,
+        "cached_input_tokens": 716288,
+        "output_tokens": 21486,
+        "reasoning_output_tokens": 9120
+      }
+    }
+  },
+  "findings": [
+    "All nine sessions completed within their deadlines and passed the automatic artifact, regression or execution-boundary checks.",
+    "The expanded collection naturally loaded build and test skills. All three variants also passed without those additional skills, so these trials show no success-rate improvement.",
+    "Elapsed time and token usage varied by task. One attempt per condition does not establish a stable efficiency advantage.",
+    "All explanation-only sessions described documented command boundaries and qualified package guarantees, but did not inspect the currently selected library in package.json.",
+    "The common prompt explicitly allowed evidence files. Explanation-only checks establish no build/test/device execution and unchanged source, configuration and artifacts, not zero filesystem writes."
+  ],
+  "limits": [
+    "The no-project-skills condition inherits the same global skills, instructions and possible plugins. It is not a skill-free model baseline.",
+    "This is one model/configuration and a native Linux fixture, not a cross-toolchain, hardware, RTOS or bare-metal validation.",
+    "Token counters are CLI-reported usage; cached_input_tokens are already included in input_tokens and are not additional usage.",
+    "Human review found a common explanation limitation despite passing automatic checks. A conservative command scanner cannot establish every possible indirect side effect.",
+    "Raw transcripts and responses remain local because they contain host paths. Hashes below identify the reviewed artifacts without publishing their contents."
+  ]
+}

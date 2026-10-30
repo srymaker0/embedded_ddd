@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "embedded-ddd"
 version = "0.2.0"
-description = "Deploy, Diagnostics, Debug: agent skills and tools for embedded Linux"
+description = "Optional Linux deployment, diagnostics and debugging helper for embedded-skills"
 requires-python = ">=3.8"
 license = {text = "MIT"}
 readme = "README.md"

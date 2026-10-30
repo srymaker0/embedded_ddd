@@ -1,0 +1,3 @@
+{
+  "application": ["tests/test_application.c", "src/application.c", "tests/sensor_stub.c"]
+}

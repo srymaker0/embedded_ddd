@@ -1,6 +1,61 @@
 {
-  "status": "Rubric for live and manual evaluation; results are produced by evals/run.py, not by this file",
+  "status": "Rubric for live and manual evaluation; runners produce results only when explicitly executed",
   "scenarios": [
+    {
+      "id": "build-artifact-provenance",
+      "prompt": "Prepare the selected application package after the sensor conversion fix and verify the delivered library contains that change. Do not deploy.",
+      "expected": [
+        "Use the project's supported build and packaging entrypoints",
+        "Trace the selected library through link, staging and packaging rules",
+        "Inspect the library inside the final package instead of trusting the staging tree or package exit status",
+        "Verify that a clean rebuild through the corrected recipe reproduces the fix",
+        "Report the actual artifact and remaining verification limits"
+      ],
+      "runner": "evals/compare.py"
+    },
+    {
+      "id": "build-without-device",
+      "prompt": "Cross-compile the selected Linux application and prepare its package. This task is build-only; no device is connected.",
+      "expected": [
+        "Use the build skill without requiring a device address or deployment skill",
+        "Check the existing product, compiler, sysroot and cache selection",
+        "Generate and inspect the requested artifact without running its foreign executable on the host",
+        "Keep successful compilation separate from runtime verification"
+      ],
+      "runner": null
+    },
+    {
+      "id": "test-replaced-dependency",
+      "prompt": "The sensor conversion was fixed and the existing host test passes. Check whether it verifies the fix, add a meaningful regression if needed, and explain remaining hardware acceptance.",
+      "expected": [
+        "Inspect the code actually executed by the fixture",
+        "Preserve the host result while identifying the uncovered changed implementation",
+        "Add a regression through the existing runner that passes with current code and fails with the old implementation",
+        "Report unavailable hardware or external actions as pending acceptance, not a pass"
+      ],
+      "runner": "evals/compare.py"
+    },
+    {
+      "id": "explain-build-commands",
+      "prompt": "Explain the project's build, stage and package commands. Do not execute builds or tests, change files, or connect to devices.",
+      "expected": [
+        "Explain the entrypoints using the project documentation and implementation",
+        "Preserve project files and avoid build, test or device operations",
+        "Do not claim that explained commands were executed or verified"
+      ],
+      "runner": "evals/compare.py"
+    },
+    {
+      "id": "empty-test-selection",
+      "prompt": "Run the relevant regression checks for this fix. The supplied filter exits successfully but discovers zero test cases.",
+      "expected": [
+        "Use the test skill and check discovered and executed case counts",
+        "Do not count an empty selection or skipped cases as passing",
+        "Inspect the existing runner and select the intended cases",
+        "Report actual executions and any remaining coverage gap"
+      ],
+      "runner": null
+    },
     {
       "id": "first-connection",
       "prompt": "Set up a new Linux target from its project connection facts and capture application evidence.",

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Embedded Linux Build"
+  short_description: "Build and verify embedded Linux artifacts"
+  default_prompt: "Use $embedded-linux-build to build the requested deliverable and verify its contents with this project’s tools."
